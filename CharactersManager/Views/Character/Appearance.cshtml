@@ -1,0 +1,52 @@
+﻿@model CharacterViewModel
+
+<h4>Wygląd</h4>
+
+@{
+    var a = Model;
+    var breeds = ViewData["Breeds"]  as Dictionary<int, string>;
+}
+
+@{
+    var selectItemList = new List<SelectListItem>();
+
+    foreach (var breed in breeds)   /*Note: The cast to (Suit[]) is not strictly necessary, but it does make the code 0.5 ns faster.*/
+    {
+        selectItemList.Add(new SelectListItem() { Text = breed.Value, Value = breed.Key.ToString()});
+    }
+}
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="Breed">Rasa</label>
+        <select class="custom-select d-block w-100" asp-for="Appearance.BreedId" asp-items="selectItemList" oninvalid="this.setCustomValidity('Wybierz rasę.')" required>
+            <option value="">Wybierz...</option>
+        </select>        
+    </div>
+
+
+
+    <div class="col-md-6 mb-6">
+        <label>Typ budowy ciała</label>
+        <input type="text" class="form-control" asp-for="Appearance.BodyType" placeholder="" value="@Model.Appearance.BodyType">
+    </div>
+
+</div>
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label>Wzrost</label>
+        <input type="text" class="form-control" asp-for="Appearance.Tall" placeholder="" value="@Model.Appearance.Tall">  
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-12 mb-3 abc">
+        @Html.LabelFor(model => model.Appearance.Description, "Cechy Szczególne", new { @class = "control-label col-md-12 row" })
+        @Html.TextAreaFor(m => m.Appearance.Description, new { @class = "textarea" })     
+    </div>
+</div>
+
+

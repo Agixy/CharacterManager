@@ -1,0 +1,104 @@
+﻿@model List<CharacterViewModel>
+
+@{
+    ViewData["Title"] = "Home Page";
+    IDictionary<int, string> breeds = ViewData["Breeds"]  as Dictionary<int, string>;
+}
+
+<main role="main">
+    <section class="jumbotron text-center">
+        <div class="container">
+            <h1>Apocalyptus Art</h1>
+            <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+            <p>
+                <a href="#" class="btn btn-primary my-2">Main call to action</a>
+                <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+            </p>
+        </div>
+    </section>
+
+    <div class="row">
+        @{
+            var selectItemList = new List<SelectListItem>();
+
+            foreach (var breed in breeds)   /*Note: The cast to (Suit[]) is not strictly necessary, but it does make the code 0.5 ns faster.*/
+            {
+                selectItemList.Add(new SelectListItem() { Text = breed.Value, Value = breed.Key.ToString() });
+            }
+        }
+
+        <div class="col-md-4 mb-3">
+            <label for="Breed">Rasa</label>
+            <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Breed" required>
+                <option value="">Wybierz...</option>
+            </select>
+            <div class="invalid-feedback">
+                Please select a valid country.
+            </div>
+        </div>
+
+
+        <div class="col-md-4 mb-3">
+            <label for="Breed">Inne wyszukiwanie</label>
+            <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Other" required>
+                <option value="">Wybierz...</option>
+            </select>
+            <div class="invalid-feedback">
+                Please select a valid country.
+            </div>
+        </div>
+
+        <div class="col-md-4 mb-3">
+            <button class="btn-filter btn-primary force-to-bottom-left" id="Filter">Filtruj </button>
+        </div>
+
+
+    </div>
+
+    <div class="album py-5 bg-light transbox">
+        <div class="container ">
+
+            <div class="row">
+
+                @{
+                    foreach (var character in Model)
+                    {
+
+                        <div class="col-md-4">
+                            <div class="card mb-4 shadow-sm no-transbox">
+                                <img src="https://v.wpimg.pl/M2QwZi5qYlMwFSxaGgpvRnNNeABcU2EQJFVgSxpHewspR3UZWgM5Uz1aOwtWCylAPgAzDBsGPVE1GXQZWV4kXzAQPypUEiVXfkVqWA1efAN-RmNGVhkiXzgcBVpRQSscOwc9S0g=" height="250" width="250">
+                                <div class="card-body">
+                                    <p class="card-text">
+                                        @character.ToString()                                       
+                                    </p>
+                                    <div class="d-flex justify-content-between align-items-center">
+                                        <div class="btn-group no-transbox">
+                                            <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = character.Id })'" class="btn btn-sm btn-outline-secondary">Edit</button>
+                                            <button onClick="location.href='@Url.Action("DeleteCharacter", "Home", new { characterId = character.Id })'" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                        </div>
+                                        <small class="text-muted">9 mins</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                }
+            </div>
+        </div>
+    </div>
+
+</main>
+
+<button onClick="location.href='@Url.Action("CreateNewCharacter", "Home")'" class="btn btn-primary btn-lg btn-block" value="Save">Dodaj</button>
+
+<footer class="text-muted">
+    <div class="container">
+        <p class="float-right">
+            <a href="#">Back to top</a>
+        </p>
+        <p></p>
+        <p>New to Bootstrap? <a href="{{ site.url }}/">Visit the homepage</a> or read our <a href="{{ site.baseurl }}/docs/{{ site.docs_version }}/getting-started/introduction/">getting started guide</a>.</p>
+    </div>
+</footer>
+

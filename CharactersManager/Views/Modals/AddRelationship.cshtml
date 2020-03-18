@@ -1,0 +1,42 @@
+﻿@{
+    IDictionary<int, string> characters = ViewData["Characters"] as Dictionary<int, string>;
+    int characterId = (int)ViewData["CharacterId"];
+}
+
+<input type="button" value="Dodaj relacje" id="addRelationshipBtn" />
+
+<div id="addModal" class="modal">
+    <div class="modal-content-a" width="70%">
+        <div class="modal-header" style="background-color: #66d9ff;">
+            <text>Dodaj rodzica</text>
+            <span class="close">&times;</span>
+        </div>
+        <div class="modal-body">
+            @{
+                var selectItemList = new List<SelectListItem>();
+
+                foreach (var character in characters)
+                {
+                    selectItemList.Add(new SelectListItem() { Text = character.Value, Value = character.Key.ToString() });
+                }
+            }
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="Breed">Postacie</label>
+                    <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Characters">
+                        <option value="">Wybierz...</option>
+                    </select>
+                </div>
+                
+                <div class="col-md-6 mb-3">
+                    <label for="Spieces">Relacja</label>
+                    <input type="text" class="form-control" id="Relationship">                  
+                </div>
+            </div>
+           
+            <input type="button" class="add-parent-button btn-primary btn"  onclick="ReloadRelationships(@ViewData["CharacterId"], $('#Characters').val(), $('#Characters :selected').text(), $('#Relationship').val())"  value="Dodaj"/>
+        </div>
+    </div>
+</div>
+

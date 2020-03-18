@@ -1,0 +1,123 @@
+﻿@model CharacterViewModel
+
+@{
+    IDictionary<int, string> characters = ViewData["Characters"] as Dictionary<int, string>;
+}
+
+<h4>Pochodzenie</h4>
+
+
+<div class="row row-cols-3">
+    <div class="col-md-5 mb-3">
+        <label>Okręg urodzenia</label>
+        <input type="text" class="form-control" asp-for="Origin.DistrictOfBirth" placeholder="" value="@Model.Origin.DistrictOfBirth">
+        <div class="invalid-feedback">
+            Zip code required.
+        </div>
+    </div>
+
+    <div class="col-md-5 mb-3">
+        <label>Matka:</label>
+        <div id="mother">
+            <a href=@Url.Action("CharacterView", "Home", new { characterId = Model.Origin.MotherId })>@characters.FirstOrDefault(ch => ch.Key == Model.Origin.MotherId).Value</a>
+        </div>
+
+        <div id="motherEdit" hidden>
+
+            @{
+                var selectItemList = new List<SelectListItem>();
+
+                foreach (var character in characters)
+                {
+                    selectItemList.Add(new SelectListItem() { Text = character.Value, Value = character.Key.ToString() });
+                }
+            }                                      
+                 
+                    <select class="custom-select d-block w-100" asp-for="Origin.MotherId" asp-items="@selectItemList" value="@Model.Origin.MotherId">
+                        <option value="">Wybierz...</option>
+                    </select>
+               
+         </div>
+
+    </div>
+
+    <div class="col-md-2 mb-3">
+        <div class="col-md-1">
+            <button type="button" id="editMother" class="parent-button">Edytuj</button>
+        </div>
+    </div>
+ </div>
+
+<div class="row row-cols-3">
+    <div class="col-md-5 mb-3">
+        <div>
+            <label>Okręg zamieszkania</label>
+            <input type="text" class="form-control" asp-for="Origin.DistrictOfResidence" placeholder="Wpisz nazwe" value="@Model.Origin.DistrictOfResidence">
+            <div class="invalid-feedback">
+                Please enter your shipping address.
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-5 mb-3">
+        <label>Ojciec:</label>
+        <div id="father">
+            <a href=@Url.Action("CharacterView", "Home", new { characterId = Model.Origin.FatherId})>@characters.FirstOrDefault(ch => ch.Key == Model.Origin.FatherId).Value</a>
+        </div>       
+
+        <div id="fatherEdit" hidden>
+            <select class="custom-select d-block w-100" asp-for="Origin.FatherId" asp-items="@selectItemList" id="Characters">
+                <option value="">Wybierz...</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="col-md-2 mb-3">       
+        <div class="col-md-1">
+            <button type="button" id="editFather" class="parent-button">Edytuj</button>
+        </div>
+    </div>
+
+    @*<div class="col-md-7" id="selectParent" hidden>
+            <div class="row">
+                <div class="col-md-9 mb-3">
+                    <div>
+                        <label for="Characters">Wybierz postać:</label>
+                        @{
+                            var selectItemList = new List<SelectListItem>();
+
+                            foreach (var character in characters)
+                            {
+                                selectItemList.Add(new SelectListItem() { Text = character.Value, Value = character.Key.ToString() });
+                            }
+                        }
+                        <select class="custom-select d-block w-100" asp-items="@selectItemList" id="CharactersA">
+                            <option value="">Wybierz...</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-1 mb-3">
+                    <button type="button" class="parent-button" id="saveParent" value="@Model.Origin.CharacterId">Zapisz</button>
+                </div>
+            </div>
+        </div>*@
+
+</div>
+
+
+    <br />
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="books">Występuje w książkach:<span class="text-muted"></span></label>
+            <div id="books">
+                <ul type="circle">
+                    @{
+                        foreach (var item in Model.Origin.BookIds)
+                        {
+                            <li>@item</li>
+                        }
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>

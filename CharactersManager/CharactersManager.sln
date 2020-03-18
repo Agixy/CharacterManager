@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29806.167
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CharactersManager", "CharactersManager.csproj", "{A17D7476-68DD-4CBB-9CD4-0B6FBFBBA643}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Service", "..\Service\Service.csproj", "{495C0E72-13DB-43F1-ADFB-44B9CC5978B5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A17D7476-68DD-4CBB-9CD4-0B6FBFBBA643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A17D7476-68DD-4CBB-9CD4-0B6FBFBBA643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A17D7476-68DD-4CBB-9CD4-0B6FBFBBA643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A17D7476-68DD-4CBB-9CD4-0B6FBFBBA643}.Release|Any CPU.Build.0 = Release|Any CPU
+		{495C0E72-13DB-43F1-ADFB-44B9CC5978B5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{495C0E72-13DB-43F1-ADFB-44B9CC5978B5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{495C0E72-13DB-43F1-ADFB-44B9CC5978B5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{495C0E72-13DB-43F1-ADFB-44B9CC5978B5}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E081530-F9C5-4375-BE25-174E0BA0296A}
+	EndGlobalSection
+EndGlobal

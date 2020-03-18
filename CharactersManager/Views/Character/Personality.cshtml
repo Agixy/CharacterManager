@@ -1,0 +1,129 @@
+﻿@model CharacterViewModel
+
+@{
+    IDictionary<int, string> characters = ViewData["Characters"] as Dictionary<int, string>;
+    ViewData["CharacterId"] = Model.Id;
+    IDictionary<int, string> typeOfCharacters = ViewData["TypeOfCharacters"] as Dictionary<int, string>;
+    IDictionary<int, string> orientations = ViewData["Orientations"] as Dictionary<int, string>;
+    IDictionary<int, string> alignmentCharts = ViewData["AlignmentCharts"] as Dictionary<int, string>;
+}
+
+<h4>Osobowość</h4>
+
+<div class="row">
+    <div class="col-md-12 mb-3 abc">
+        @Html.LabelFor(model => model.Personality.CharacterTraits, "Cechy charakteru", new { @class = "control-label col-md-12 row" })
+        @Html.TextAreaFor(m => m.Personality.CharacterTraits, new { @class = "textarea" })      
+    </div>
+</div>
+
+<div class="row">
+
+    <div class="col-md-4 mb-3">
+        <label for="Values">Wartości</label>
+        <input type="text" class="form-control" id="Values" asp-for="Personality.Values" placeholder="" value="@Model.Personality.Values">      
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="Ambitions">Ambicje<span class="text-muted"></span></label>
+        <input type="text" class="form-control" asp-for="Personality.Ambitions" id="Ambitions" placeholder="">       
+    </div>
+    <div class="col-md-4 mb-3">
+        <label for="Goals">Cele<span class="text-muted"></span></label>
+        <input type="text" class="form-control" asp-for="Personality.Goals" id="Goals" placeholder="">      
+    </div>
+</div>
+
+
+@{
+    var typesOfCharactersList = new List<SelectListItem>();
+
+    foreach (var character in typeOfCharacters)
+    {
+        typesOfCharactersList.Add(new SelectListItem() { Text = character.Value, Value = character.Key.ToString() });
+    }
+}
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="TypeOfCharacter">Typ charakteru</label>
+        <select class="custom-select d-block w-100" asp-for="Personality.TypeOfCharacterId" asp-items="@typesOfCharactersList" id="TypeOfCharacter" 
+                value="@Model.Personality.TypeOfCharacterId" oninvalid="this.setCustomValidity('Wybierz typ charakteru.')" required>
+            <option value="">Wybierz...</option>
+        </select>      
+    </div>
+
+
+    @{
+        var orientationList = new List<SelectListItem>();
+
+        foreach (var character in orientations)
+        {
+            orientationList.Add(new SelectListItem() { Text = character.Value, Value = character.Key.ToString() });
+        }
+    }
+
+    <div class="col-md-6 mb-3">
+        <label for="SexualOrientation">Orientacja</label>
+        <select class="custom-select d-block w-100" asp-for="Personality.OrientationId" asp-items="@orientationList" id="SexualOrientation" 
+                value="@Model.Personality.OrientationId" oninvalid="this.setCustomValidity('Wybierz orientację.')" required>
+            <option value="">Wybierz...</option>
+        </select>        
+    </div>
+
+</div>
+
+@{
+    var aligmentChartList = new List<SelectListItem>();
+
+    foreach (var character in alignmentCharts)
+    {
+        aligmentChartList.Add(new SelectListItem() { Text = character.Value, Value = character.Key.ToString() });
+    }
+}
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        <label for="Breed">Aligment chart</label>
+        <select class="custom-select d-block w-100" asp-for="Personality.AligmentChartId" asp-items="@aligmentChartList" id="Breed"
+                value="@Model.Personality.TypeOfCharacterId" oninvalid="this.setCustomValidity('Wybierz aligment chart.')" required>
+            <option value="">Wybierz...</option>
+        </select>
+        <div class="invalid-feedback">
+            Please select a valid country.
+        </div>
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="Intrestings">Zainteresowania<span class="text-muted"></span></label>
+        <input type="text" class="form-control" asp-for="Personality.Intrestings" id="Intrestings" placeholder="">      
+    </div>
+
+</div>
+
+<div class="row">
+
+    <div class="col-md-6 mb-3">
+        <label for="TheBiggestFear">Największy lęk<span class="text-muted"></span></label>
+        <input type="text" class="form-control" asp-for="Personality.TheBiggestFear" id="TheBiggestFear" placeholder="">        
+    </div>
+
+    <div class="col-md-6 mb-3">
+        <label for="FavouriteQuote">Ulubiony cytat<span class="text-muted"></span></label>
+        <input type="text" class="form-control" asp-for="Personality.FavouriteQuote" id="FavouriteQuote" placeholder="">       
+    </div>
+
+</div>
+
+
+<div class="row">
+    <div class="col-md-6 mb-3">
+        @Html.LabelFor(model => model.Personality.PoliticalViews, "Poglądy polityczne", new { @class = "control-label col-md-12 row" })
+        @Html.TextAreaFor(m => m.Personality.PoliticalViews, new { @class = "textarea", @rows = "7" })       
+    </div>
+
+    <div class="col-md-6 mb-3">
+        @Html.LabelFor(model => model.Personality.AdditionalInformation, "Dodatkowe info", new { @class = "control-label col-md-12 row" })
+        @Html.TextAreaFor(m => m.Personality.AdditionalInformation, new { @class = "textarea", @rows = "7" })     
+    </div>
+</div>
+

@@ -1,0 +1,20 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Service.Models
+{
+    public class Character
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
+        public string Surname { get; set; }
+        public string Sex { get; set; }
+        public virtual Origin Origin { get; set; }
+        public string Profesion { get; set; }
+        public int BirthErrar { get; set; }
+        public ICollection<Relationship> Relationships { get; set; }
+        public  Personality Personality { get; set; }
+        public Appearance Appearance { get; set; }
+    }
+}
