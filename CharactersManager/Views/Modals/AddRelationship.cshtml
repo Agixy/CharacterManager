@@ -3,11 +3,11 @@
     int characterId = (int)ViewData["CharacterId"];
 }
 
-<input type="button" value="Dodaj relacje" id="addRelationshipBtn" />
+<input type="button" class="btn-add-relationship blue-btn" value="Dodaj relacje" id="addRelationshipBtn" />
 
 <div id="addModal" class="modal">
     <div class="modal-content-a" width="70%">
-        <div class="modal-header" style="background-color: #66d9ff;">
+        <div class="add-parent-modal-header">
             <text>Dodaj rodzica</text>
             <span class="close">&times;</span>
         </div>
@@ -35,7 +35,7 @@
                 </div>
             </div>
            
-            <input type="button" class="add-parent-button btn-primary btn"  onclick="ReloadRelationships(@ViewData["CharacterId"], $('#Characters').val(), $('#Characters :selected').text(), $('#Relationship').val())"  value="Dodaj"/>
+            <input type="button" class="add-parent-button"  onclick="ReloadRelationships(@ViewData["CharacterId"], $('#Characters').val(), $('#Characters :selected').text(), $('#Relationship').val())"  value="Dodaj"/>
         </div>
     </div>
 </div>

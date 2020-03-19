@@ -14,7 +14,7 @@
 
 
     <div class="container text-light">
-        <div class="py-5 text-center">
+        <div class="main-position text-center">
             <h2>@Model.ToString()</h2>
         </div>
 
@@ -80,12 +80,12 @@
                                     foreach (var item in Model.Relationships)
                                     {
 
-                                        <a href=@Url.Action("CharacterView", "Home", new { characterId = item.TargetRelationshipCharacterId })>@item.TargetRelationshipCharacterName - @item.Type</a><br>
+                                    @*<a href=@Url.Action("CharacterView", "Home", new { characterId = item.TargetRelationshipCharacterId })>@item.TargetRelationshipCharacterName - @item.Type</a><br>*@
 
 
-                                        @*<p>
-                                                <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { animalId = @item.CharacterId })'" class="">@item.RelationshipCharacterName</button>
-                                            </p>*@
+                                    <p>
+                                        <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = item.TargetRelationshipCharacterId })'" class="btn-relation-char">@item.TargetRelationshipCharacterName - @item.Type</button>
+                                     </p>
                                     }
                                 }
                             </div>
@@ -98,29 +98,29 @@
                         </div>
                     </div>
 
-                    <hr class="mb-4">
+                    <hr class="mb-4" style="background-color: #97a6b4">
 
                     @Html.HiddenFor(m => m.Appearance)
                     @{
                         Html.RenderPartial("~/Views/Character/Appearance.cshtml", Model, new ViewDataDictionary(this.ViewData));
                     }
 
-                    <hr class="mb-4">
+                    <hr class="mb-4" style="background-color: #97a6b4">
 
                     @{
                         Html.RenderPartial("~/Views/Character/OriginView.cshtml", Model, new ViewDataDictionary(this.ViewData));
                     }
-                    <hr class="mb-4">
+                    <hr class="mb-4" style="background-color: #97a6b4">
                     @{
                         Html.RenderPartial("~/Views/Character/Personality.cshtml", Model, new ViewDataDictionary(this.ViewData));
                     }
-                    <hr class="mb-4">
+                    <hr class="mb-4" style="background-color: #97a6b4">
 
 
                     @Html.HiddenFor(m => m.Id)
                     @for (int i = 0; i < Model.Origin.BookIds.Count; i++)
                     {
-                        @Html.HiddenFor(m => m.Origin.BookIds[i])
+                    @Html.HiddenFor(m => m.Origin.BookIds[i])
                     }
 
                     <input type="submit" value="Zapisz" onclick="ClearTemporaryJSArrays()" class="btn btn-primary btn-lg btn-block" />

@@ -77,35 +77,10 @@
             <button type="button" id="editFather" class="parent-button">Edytuj</button>
         </div>
     </div>
-
-    @*<div class="col-md-7" id="selectParent" hidden>
-            <div class="row">
-                <div class="col-md-9 mb-3">
-                    <div>
-                        <label for="Characters">Wybierz postać:</label>
-                        @{
-                            var selectItemList = new List<SelectListItem>();
-
-                            foreach (var character in characters)
-                            {
-                                selectItemList.Add(new SelectListItem() { Text = character.Value, Value = character.Key.ToString() });
-                            }
-                        }
-                        <select class="custom-select d-block w-100" asp-items="@selectItemList" id="CharactersA">
-                            <option value="">Wybierz...</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="col-md-1 mb-3">
-                    <button type="button" class="parent-button" id="saveParent" value="@Model.Origin.CharacterId">Zapisz</button>
-                </div>
-            </div>
-        </div>*@
-
 </div>
 
 
-    <br />
+    @*<br />
     <div class="row">
         <div class="col-md-6 mb-3">
             <label for="books">Występuje w książkach:<span class="text-muted"></span></label>
@@ -120,4 +95,4 @@
                 </ul>
             </div>
         </div>
-    </div>
+    </div>*@
