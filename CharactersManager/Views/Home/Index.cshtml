@@ -5,8 +5,9 @@
     IDictionary<int, string> breeds = ViewData["Breeds"]  as Dictionary<int, string>;
 }
 
-<main role="main">
-    <section class="jumbotron text-center">
+
+<main role="main" class="main-position">
+    <div class="characters-album-header text-center pb-4">
         <div class="container">
             <h1>Apocalyptus Art</h1>
             <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
@@ -15,7 +16,9 @@
                 <a href="#" class="btn btn-secondary my-2">Secondary action</a>
             </p>
         </div>
-    </section>
+    </div>
+
+ 
 
     <div class="row">
         @{
@@ -27,8 +30,8 @@
             }
         }
 
-        <div class="col-md-4 mb-3">
-            <label for="Breed">Rasa</label>
+        <div class="col-md-4 mb-3 col">
+            <label class="filtering-label" for="Breed">Rasa</label>
             <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Breed" required>
                 <option value="">Wybierz...</option>
             </select>
@@ -39,7 +42,7 @@
 
 
         <div class="col-md-4 mb-3">
-            <label for="Breed">Inne wyszukiwanie</label>
+            <label class="filtering-label" for="Other">Inne wyszukiwanie</label>
             <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Other" required>
                 <option value="">Wybierz...</option>
             </select>
@@ -48,14 +51,19 @@
             </div>
         </div>
 
-        <div class="col-md-4 mb-3">
-            <button class="btn-filter btn-primary force-to-bottom-left" id="Filter">Filtruj </button>
+        <div class="col-md-2 mb-3">
+            <button class="btn-filter force-to-bottom-left" id="Filter">Filtruj </button>
         </div>
+
+        <div class="col-md-2 mb-3">
+            <button onClick="location.href='@Url.Action("CreateNewCharacter", "Home")'" class="btn-add-character force-to-bottom-left" value="Save">Dodaj postać</button>
+        </div>
+       
 
 
     </div>
 
-    <div class="album py-5 bg-light transbox">
+    <div class="album py-5">
         <div class="container ">
 
             <div class="row">
@@ -65,7 +73,7 @@
                     {
 
                         <div class="col-md-4">
-                            <div class="card mb-4 shadow-sm no-transbox">
+                            <div class="card mb-4 shadow-sm">
                                 <img src="https://v.wpimg.pl/M2QwZi5qYlMwFSxaGgpvRnNNeABcU2EQJFVgSxpHewspR3UZWgM5Uz1aOwtWCylAPgAzDBsGPVE1GXQZWV4kXzAQPypUEiVXfkVqWA1efAN-RmNGVhkiXzgcBVpRQSscOwc9S0g=" height="250" width="250">
                                 <div class="card-body">
                                     <p class="card-text">
@@ -73,8 +81,8 @@
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group no-transbox">
-                                            <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = character.Id })'" class="btn btn-sm btn-outline-secondary">Edit</button>
-                                            <button onClick="location.href='@Url.Action("DeleteCharacter", "Home", new { characterId = character.Id })'" class="btn btn-sm btn-outline-secondary">Delete</button>
+                                            <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = character.Id })'" class="btn btn-sm btn-outline-secondary">Edytuj</button>
+                                            <button onClick="location.href='@Url.Action("DeleteCharacter", "Home", new { characterId = character.Id })'" class="btn btn-sm btn-outline-secondary">Usuń</button>
                                         </div>
                                         <small class="text-muted">9 mins</small>
                                     </div>
@@ -87,10 +95,8 @@
             </div>
         </div>
     </div>
-
 </main>
 
-<button onClick="location.href='@Url.Action("CreateNewCharacter", "Home")'" class="btn btn-primary btn-lg btn-block" value="Save">Dodaj</button>
 
 <footer class="text-muted">
     <div class="container">

@@ -6,31 +6,80 @@ for details on configuring this project to bundle and minify static web assets. 
 }
 
 a.navbar-brand {
-  white-space: normal;
-  text-align: center;
-  word-break: break-all;
+    white-space: normal;
+    text-align: center;
+    word-break: break-all;
+}
+
+.navbar-color {
+    background-color: #4E5D6C !important;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.75);
+}
+
+.album {
+    background-color: #899aa9;
+}
+
+.characters-album-header {
+    text-align: center !important;
+    padding-bottom: 1rem !important;
+    padding: 2rem 2rem;
+    margin-bottom: 2rem;
+    background-color: #e9ecef;
+    border-radius: .3rem;
+    box-sizing: border-box;
+}
+
+.main-position {
+    position: inherit;
+    margin-top: 80px;
+}
+
+.filtering-label {
+    color: white;
 }
 
 /* Provide sufficient contrast against white background */
 
-.btn-primary {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
-}
 
 .btn-filter {
-    border-radius: 5px;
-    font-size: 25px;
-    width: 220px;
-    height: 50px;
+    width: 180px;
+    height: 60%;
+    color: #fff;
+    border: 1px solid transparent;
+    font-size: 1.2375rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+    background-color: #6bc5e1;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
 
-.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
-  color: #fff;
-  background-color: #1b6ec2;
-  border-color: #1861ac;
+    .btn-filter:hover {
+        background-color: #41b5d8;
+    }
+
+.btn-add-character {
+    width: 180px;
+    height: 60%;
+    color: #fff;
+    border: 1px solid transparent;
+    font-size: 1.2375rem;
+    font-weight: 500;
+    border-radius: 0.25rem;
+    background-color: #6bc5e1;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
 }
+
+    .btn-add-character:hover {
+        background-color: #41b5d8;
+    }
+
+
 
 /* Sticky footer styles
 -------------------------------------------------- */
@@ -38,17 +87,16 @@ html {
     font-size: 14px;
 }
 
-div.background {
-    /*background: url(https://s3.eu-central-1.amazonaws.com/pressland-cms/cache/article_show_cover/1o/24587136-najpiekniejsze-kwiaty-z-ogrodow-naszych-babc.jpeg) repeat;*/    
+body.background {
+    background-color: #2B3E50;
+}
+
+div.background {    
     background-size: cover;
 }
 
 div.transbox {
     background-color: black; /*rgba(100,0,0,50);*/
-}
-
-div.no-transbox {
-    background-color: white;
 }
 
 
@@ -104,8 +152,8 @@ textarea {
 
 .force-to-bottom-left {
     position: absolute;
-    bottom: 5%;
-    left: 4%;
+    bottom: 0;
+    left: 0;
 }
 
 .parent-button {
