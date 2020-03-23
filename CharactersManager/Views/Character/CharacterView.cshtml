@@ -22,6 +22,27 @@
             Html.RenderPartial("~/Views/Character/Gallery.cshtml");
         }
 
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <form asp-action="UploadImage"
+                  asp-controller="Home"
+                  method="post"
+                  enctype="multipart/form-data">
+                <input type="file" id="file1"
+                       name="file1"
+                       multiple="multiple"/>
+                <button class="blue-btn" type="submit">Zapisz zdjęcie</button>
+            </form>
+
+        </div>
+        @*<h1>@ViewBag.Message</h1>
+        <h1>@ViewBag.ImageTitle</h1>
+        <img src="@ViewBag.ImageDataUrl" />*@
+
+      
+
+    </div>
+
 
         <div class="row">
             <div class="col-md-10 order-md-1">

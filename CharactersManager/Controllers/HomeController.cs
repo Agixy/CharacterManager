@@ -11,6 +11,8 @@ using CharactersManager.Mappings;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
+using System.IO;
+using System;
 
 namespace CharactersManager.Controllers
 {
@@ -21,6 +23,7 @@ namespace CharactersManager.Controllers
         private readonly IMapper _mapper;
 
         private IList<Character> AllCharacters;
+        private IList<Image> AllImages;
         private Dictionary<int, string> Breeds;
         private Dictionary<int, string> TypeOfCharacters;
         private Dictionary<int, string> Orientations;
@@ -46,11 +49,37 @@ namespace CharactersManager.Controllers
                 Orientations = context.Orientations.ToDictionary(b => b.Id, b => b.Name);
                 AlignmentCharts = context.AlignmentCharts.ToDictionary(b => b.Id, b => b.Name);
             }
+
+            using (var context = new ImageDbContext())
+            {
+                AllImages = context.Images.ToList();
+            }
+        }
+
+        public string GetAvatar()
+        {
+            using (var context = new ImageDbContext())
+            {
+                Image img = context.Images.OrderByDescending
+             (i => i.Id).FirstOrDefault();
+                string imageBase64Data =
+            Convert.ToBase64String(img.ImageData);
+               return string.Format("data:image/jpg;base64,{0}",
+            imageBase64Data);
+
+                
+            }
         }
 
         public IActionResult Index()
         {
             var characters = AllCharacters.Select(x => _mapper.Map<CharacterViewModel>(x)).ToList();
+
+            foreach (var item in characters)
+            {
+                item.Images = AllImages.Where(i => i.CharacterId == item.Id).Select(i => _mapper.Map<ImageViewModel>(i)).ToList();
+            }
+           
             ViewData["Breeds"] = Breeds;
             return View(characters);
         }
@@ -190,6 +219,56 @@ namespace CharactersManager.Controllers
             }
 
             return View("~/Views/Character/CharacterView.cshtml", new CharacterViewModel());
+        }
+
+        [HttpPost]
+        public IActionResult UploadImage()
+        {
+            foreach (var file in Request.Form.Files)
+            {
+                Image img = new Image();
+                img.ImageTitle = file.FileName;
+
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                img.CharacterId = 3;
+                img.ImageTitle = "Cos";
+                img.ImageData = ms.ToArray();
+                img.IsAvatar = true;
+
+                ms.Close();
+                ms.Dispose();
+
+                using (var context = new ImageDbContext())
+                {
+                    context.Images.Add(img);
+                    context.SaveChanges();
+                }
+           
+            }
+
+            return Redirect("/Home/Index");
+        }
+
+        [HttpPost]
+        public ActionResult RetrieveImage()
+        {
+            using (var context = new ImageDbContext())
+            {
+                Image img = context.Images.OrderByDescending
+             (i => i.Id).SingleOrDefault();
+                string imageBase64Data =
+            Convert.ToBase64String(img.ImageData);
+                string imageDataURL =
+            string.Format("data:image/jpg;base64,{0}",
+            imageBase64Data);
+                ViewBag.ImageTitle = img.ImageTitle;
+                ViewBag.ImageDataUrl = imageDataURL;
+
+                ViewData["Breeds"] = Breeds;
+
+                return View("Index", AllCharacters.Select(x => _mapper.Map<CharacterViewModel>(x)).ToList());
+            }         
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

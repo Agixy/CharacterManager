@@ -23,6 +23,7 @@ namespace CharactersManager.Mappings
             CreateMap<Origin, OriginViewModel>();
             CreateMap<Personality, PersonalityViewModel>();
             CreateMap<Appearance, AppearanceViewModel>();
+            CreateMap<Image, ImageViewModel>().ForMember(dest => dest.ImageData, opt => opt.MapFrom(src => string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(src.ImageData))));
             CreateMap<Breed, string>().ConvertUsing(r => r.Name);
             CreateMap<Book, string>().ConvertUsing(a => a.Title);
 

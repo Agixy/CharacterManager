@@ -22,6 +22,14 @@ namespace Service
             }                      
         }
 
+        public List<Image> GetAllImages()
+        {
+            using (var context = new ImageDbContext())
+            {
+                return context.Images.ToList();
+            }
+        }
+
         public Character GetCharacterById(int id)
         {
             using (var context = new CharacterDbContext())
@@ -42,6 +50,12 @@ namespace Service
         private static void CreateDatabase()
         {
             using (var context = new CharacterDbContext())
+            {
+                context.Database.EnsureCreated();
+                context.SaveChanges();
+            }
+
+            using (var context = new ImageDbContext())
             {
                 context.Database.EnsureCreated();
                 context.SaveChanges();

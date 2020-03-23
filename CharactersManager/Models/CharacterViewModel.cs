@@ -15,6 +15,7 @@ namespace CharactersManager.Models
         public List<RelationshipViewModel> Relationships { get; set; }
         public PersonalityViewModel Personality { get; set; }
         public AppearanceViewModel Appearance { get; set; }
+        public List<ImageViewModel> Images { get; set; }
 
         public CharacterViewModel()
         {
@@ -22,6 +23,7 @@ namespace CharactersManager.Models
             Relationships = new List<RelationshipViewModel>();
             Personality = new PersonalityViewModel();
             Appearance = new AppearanceViewModel();
+            Images = new List<ImageViewModel>();
         }
 
         public override string ToString()
