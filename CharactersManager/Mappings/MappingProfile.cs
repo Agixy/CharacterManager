@@ -13,23 +13,17 @@ namespace CharactersManager.Mappings
         public MappingProfile()
         {
 
-            CreateMap<CharacterViewModel, Character>();
+            CreateMap<CharacterViewModel, Character>().ForMember(dest => dest.Relationships, m => m.MapFrom(src => String.Join(" ", src.Relationships)));
             CreateMap<OriginViewModel, Origin>();
             CreateMap<PersonalityViewModel, Personality>();
-            CreateMap<AppearanceViewModel, Appearance>();
+            CreateMap<AppearanceViewModel, Appearance>();          
 
 
-            CreateMap<Character, CharacterViewModel>();
+            CreateMap<Character, CharacterViewModel>().AfterMap((src, dest) => dest.Relationships = src.Relationships?.Split(',').ToList());         
             CreateMap<Origin, OriginViewModel>();
             CreateMap<Personality, PersonalityViewModel>();
             CreateMap<Appearance, AppearanceViewModel>();
-            CreateMap<Breed, string>().ConvertUsing(r => r.Name);
-            CreateMap<Book, string>().ConvertUsing(a => a.Title);
-
-            CreateMap<Relationship, RelationshipViewModel>()
-                    .ForMember(dest => dest.Type, opt => opt.MapFrom(src => src.Type))
-                    .ForMember(dest => dest.TargetRelationshipCharacterName, opt => opt.MapFrom(src => src.TargetRelationshipCharacter.Name + " " + src.TargetRelationshipCharacter.Surname))
-                    .ForMember(dest => dest.TargetRelationshipCharacterId, opt => opt.MapFrom(src => src.TargetRelationshipCharacter.Id));
+            CreateMap<Breed, string>().ConvertUsing(r => r.Name);     
         }
     }
 }

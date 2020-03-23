@@ -77,16 +77,29 @@
 
                             <div id="relationships">
                                 @{
-                                    foreach (var item in Model.Relationships)
+                                    if (Model.Relationships != null)
                                     {
+                                        foreach (var item in Model.Relationships)
+                                        {
 
-                                    @*<a href=@Url.Action("CharacterView", "Home", new { characterId = item.TargetRelationshipCharacterId })>@item.TargetRelationshipCharacterName - @item.Type</a><br>*@
 
+                                            var existingCharacter = characters.FirstOrDefault(ch => ch.Value.Equals(item));
 
-                                    <p>
-                                        <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = item.TargetRelationshipCharacterId })'" class="btn-relation-char">@item.TargetRelationshipCharacterName - @item.Type</button>
-                                     </p>
+                                            if (existingCharacter.Value != null)
+                                            {
+                                                <p>
+                                                    <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = existingCharacter.Key })'" class="btn-relation-char">@item</button>
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p>
+                                                    <button type="button" class="btn-relation-char">@item</button>
+                                                </p>
+                                            }
+                                        }
                                     }
+
                                 }
                             </div>
                         </div>

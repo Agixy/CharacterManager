@@ -40,7 +40,7 @@ namespace CharactersManager.Controllers
         {
             using (var context = new CharacterDbContext())
             {
-                AllCharacters = context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).Include(ch => ch.Origin.BookOrigins).Include(ch => ch.Relationships).ToList();
+                AllCharacters = context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).ToList();
                 Breeds = context.Breeds.ToDictionary(b => b.Id, b => b.Name);
                 TypeOfCharacters = context.TypeOfCharacters.ToDictionary(b => b.Id, b => b.Name);
                 Orientations = context.Orientations.ToDictionary(b => b.Id, b => b.Name);
@@ -50,7 +50,7 @@ namespace CharactersManager.Controllers
 
         public IActionResult Index()
         {
-            var characters = AllCharacters.Select(x => _mapper.Map<CharacterViewModel>(x)).ToList();
+            var characters = AllCharacters.Select(x => _mapper.Map<CharacterViewModel>(x)).OrderBy(ch => ch.Name).ToList();
             ViewData["Breeds"] = Breeds;
             return View(characters);
         }
@@ -91,7 +91,6 @@ namespace CharactersManager.Controllers
                     character.Appearance.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Appearance.Id;
                     character.Personality.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Personality.Id;
                     character.Origin.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Origin.Id;
-                    character.Relationships = mapper.MapRelationshipsToModel(HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships"), AllCharacters);
 
                     context.Characters.Update(character);                   
                 }             
@@ -113,7 +112,6 @@ namespace CharactersManager.Controllers
                 context.Origins.Remove(character.Origin);
                 context.Pertonalities.Remove(character.Personality);
                 context.Appearances.Remove(character.Appearance);
-                context.Relationships.RemoveRange(character.Relationships);
                 context.Characters.Remove(character);
                 context.SaveChanges();
             }

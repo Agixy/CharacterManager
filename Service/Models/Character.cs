@@ -13,7 +13,7 @@ namespace Service.Models
         public virtual Origin Origin { get; set; }
         public string Profesion { get; set; }
         public int BirthErrar { get; set; }
-        public ICollection<Relationship> Relationships { get; set; }
+        public string Relationships { get; set; }
         public  Personality Personality { get; set; }
         public Appearance Appearance { get; set; }
     }

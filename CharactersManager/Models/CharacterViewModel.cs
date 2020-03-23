@@ -12,14 +12,14 @@ namespace CharactersManager.Models
         public OriginViewModel Origin { get; set; }
         public string Profesion { get; set; } 
         public int BirthErrar { get; set; }
-        public List<RelationshipViewModel> Relationships { get; set; }
+        public List<string> Relationships { get; set; }
         public PersonalityViewModel Personality { get; set; }
         public AppearanceViewModel Appearance { get; set; }
 
         public CharacterViewModel()
         {
             Origin = new OriginViewModel();
-            Relationships = new List<RelationshipViewModel>();
+            Relationships = new List<string>();
             Personality = new PersonalityViewModel();
             Appearance = new AppearanceViewModel();
         }

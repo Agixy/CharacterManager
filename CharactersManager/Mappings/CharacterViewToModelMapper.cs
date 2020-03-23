@@ -28,23 +28,6 @@ namespace CharactersManager.Mappings
             return character;
         }
 
-        public IList<Relationship> MapRelationshipsToModel(IList<RelationshipViewModel> viewModelList, IList<Character> allCharacters)
-        {
-            var result = new List<Relationship>();
-            if(viewModelList != null)
-            {
-                foreach (var relationship in viewModelList)
-                {
-                    result.Add(new Relationship()
-                    {
-                        Type = relationship.Type,
-                        TargetRelationshipCharacter = allCharacters.FirstOrDefault(ch => ch.Id == relationship.TargetRelationshipCharacterId),
-                        CharacterId = relationship.CharacterId
-                    });
-                }
-            }
-
-            return result;
-        }     
+         
     }
 }

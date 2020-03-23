@@ -13,7 +13,5 @@ namespace Service.Models
         public string DistrictOfBirth { get; set; }
         public int FatherId { get; set; }
         public int MotherId { get; set; }
-        public ICollection<BookOrigin> BookOrigins { get; set; }
-       // public virtual Character Character { get; set; }
     }
 }
