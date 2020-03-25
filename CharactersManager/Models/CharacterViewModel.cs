@@ -8,6 +8,11 @@ namespace CharactersManager.Models
         public int Id { get; set; }
         public string Name { get; set; }
         public string Surname { get; set; }
+        public string DisplayName 
+        {
+            get => Name + " " + Surname;
+            private set { }
+        }
         public string Sex { get; set; }        
         public OriginViewModel Origin { get; set; }
         public string Profesion { get; set; } 
@@ -15,6 +20,7 @@ namespace CharactersManager.Models
         public List<string> Relationships { get; set; }
         public PersonalityViewModel Personality { get; set; }
         public AppearanceViewModel Appearance { get; set; }
+        public List<ImageViewModel> Images { get; set; }
 
         public CharacterViewModel()
         {
@@ -22,11 +28,7 @@ namespace CharactersManager.Models
             Relationships = new List<string>();
             Personality = new PersonalityViewModel();
             Appearance = new AppearanceViewModel();
-        }
-
-        public override string ToString()
-        {
-            return Name + " " + Surname;
+            Images = new List<ImageViewModel>();
         }
     }   
 }

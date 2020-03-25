@@ -6,20 +6,36 @@ var relationships = [];
 var addRelationshipModal = document.getElementById("addModal");
 var closeButtonsArray = document.getElementsByClassName("close");
 
-function ReloadRelationships(characterId, relationshipCharId, relationshipCharName, relationshipType) {  
+function ReloadRelationships(characterId, relationshipCharName, relationshipType) {  
     var newRelationship = [];
 
-    if (relationshipCharId !== null && relationshipType !== null) {
-        newRelationship.push("<a href='/Home/CharacterView/" + relationshipCharId + "'>" + relationshipCharName + " - " + relationshipType + "</a><br>");
+    if (relationshipCharName !== null && relationshipType !== null) {
+
+        $.ajax({
+            type: 'GET',
+            url: '/Home/Exist',
+            data: {relationshipCharacterName: relationshipCharName },
+            success: function (id) {
+                if (id) {
+                    newRelationship.push("<a href='/Home/CharacterView/" + id + "'>" + relationshipCharName + " - " + relationshipType + "</a><br>");
+                }
+                else {
+                     newRelationship.push("<a>" + relationshipCharName + " - " + relationshipType + "</a><br>");
+                }
+                $('#relationships').append(newRelationship);
+            },
+            
+        });
+
+        //newRelationship.push("<a href='/Home/CharacterView/" + relationshipCharId + "'>" + relationshipCharName + " - " + relationshipType + "</a><br>");
 
             $.ajax({
                 type: 'POST',
                 url: '/Home/AddRelationship',
-                data: { characterId: characterId, relationshipCharacterId: relationshipCharId, relationship: relationshipType }
+                data: { characterId: characterId, relationshipCharacterName: relationshipCharName, relationship: relationshipType }
             });
     }      
-
-    $('#relationships').append(newRelationship);
+   
     CloseAddRelationshipModal();    
 };
 
@@ -29,7 +45,21 @@ function LoadRelationships(characterId) {
     $.getJSON("/Home/GetRelationhips/" + characterId, function (result) {
 
         $.each(result, function () {
-            relationships.push("<a href='/Home/CharacterView/" + this.targetRelationshipCharacter.id + "'>" + this.targetRelationshipCharacter.name + "-" + this.type + "</a><br>");
+
+            $.ajax({
+                type: 'GET',
+                url: '/Home/Exist',
+                data: { relationshipCharacterName: this.targetRelationshipCharacter.name + ' ' + this.targetRelationshipCharacter.surname },
+                success: function (id) {
+                    if (id !== 0) {
+                        relationships.push("<a href='/Home/CharacterView/" + id + "'>" + this.targetRelationshipCharacter.name + "-" + this.type + "</a><br>");
+                    }
+                    else {
+                        relationships.push("<a>" + this.targetRelationshipCharacter.name + "-" + this.type + "</a><br>");
+                    }
+                },
+
+            });           
         });
 
         $('#relationships').append(relationships.join(""));
@@ -88,3 +118,12 @@ $(function () {
     });
 });
 
+$(function () {
+    $.getJSON("/Home/GetAllCharacters/", function (result) {
+
+        $.each(result, function () {
+            $('#charactersList').append("<option value='" +
+                this + "'></option>");
+        });       
+    });       
+});

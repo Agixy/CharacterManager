@@ -13,7 +13,7 @@ namespace CharactersManager.Mappings
         public MappingProfile()
         {
 
-            CreateMap<CharacterViewModel, Character>().ForMember(dest => dest.Relationships, m => m.MapFrom(src => String.Join(" ", src.Relationships)));
+            CreateMap<CharacterViewModel, Character>().ForMember(dest => dest.Relationships, m => m.MapFrom(src => String.Join(",", src.Relationships)));
             CreateMap<OriginViewModel, Origin>();
             CreateMap<PersonalityViewModel, Personality>();
             CreateMap<AppearanceViewModel, Appearance>();          
@@ -24,6 +24,7 @@ namespace CharactersManager.Mappings
             CreateMap<Personality, PersonalityViewModel>();
             CreateMap<Appearance, AppearanceViewModel>();
             CreateMap<Breed, string>().ConvertUsing(r => r.Name);     
+            CreateMap<Image, ImageViewModel>().ForMember(dest => dest.ImageData, opt => opt.MapFrom(src => string.Format("data:image/jpg;base64,{0}", Convert.ToBase64String(src.ImageData))));
         }
     }
 }

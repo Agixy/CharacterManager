@@ -23,10 +23,19 @@
 
             <div class="row">
                 <div class="col-md-6 mb-3">
-                    <label for="Breed">Postacie</label>
-                    <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Characters">
-                        <option value="">Wybierz...</option>
-                    </select>
+                    <label for="Characters">Postacie</label>
+                    @*<select class="custom-select d-block w-100" asp-items="@selectItemList" id="Characters">
+            <option value="">Wybierz lub wpisz</option>
+        </select>*@
+
+                    <input type="text" class="form-control" list="charactersList" id="Characters" />
+
+
+                    <datalist id="charactersList" ">
+                    </datalist>
+
+                 
+
                 </div>
                 
                 <div class="col-md-6 mb-3">
@@ -35,7 +44,7 @@
                 </div>
             </div>
            
-            <input type="button" class="add-parent-button"  onclick="ReloadRelationships(@ViewData["CharacterId"], $('#Characters').val(), $('#Characters :selected').text(), $('#Relationship').val())"  value="Dodaj"/>
+            <input type="button" class="add-parent-button"  onclick="ReloadRelationships(@ViewData["CharacterId"], $('#Characters').val(), $('#Relationship').val())"  value="Dodaj"/>
         </div>
     </div>
 </div>

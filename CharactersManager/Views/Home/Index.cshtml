@@ -2,7 +2,9 @@
 
 @{
     ViewData["Title"] = "Home Page";
-    IDictionary<int, string> breeds = ViewData["Breeds"]  as Dictionary<int, string>;
+    IDictionary<int, string> breeds = ViewData["Breeds"] as Dictionary<int, string>;
+
+
 }
 
 
@@ -18,7 +20,7 @@
         </div>
     </div>
 
- 
+
 
     <div class="row">
         @{
@@ -58,7 +60,7 @@
         <div class="col-md-2 mb-3">
             <button onClick="location.href='@Url.Action("CreateNewCharacter", "Home")'" class="btn-add-character force-to-bottom-left blue-btn" value="Save">Dodaj postać</button>
         </div>
-       
+
 
 
     </div>
@@ -74,10 +76,10 @@
 
                         <div class="col-md-4">
                             <div class="card mb-4 shadow-sm">
-                                <img src="https://v.wpimg.pl/M2QwZi5qYlMwFSxaGgpvRnNNeABcU2EQJFVgSxpHewspR3UZWgM5Uz1aOwtWCylAPgAzDBsGPVE1GXQZWV4kXzAQPypUEiVXfkVqWA1efAN-RmNGVhkiXzgcBVpRQSscOwc9S0g=" height="250" width="250">
+                                <img src="@Url.Content(character.Images.FirstOrDefault()?.ImageData)" height="250" width="250">
                                 <div class="card-body">
                                     <p class="card-text">
-                                        @character.ToString()                                       
+                                        @character.DisplayName
                                     </p>
                                     <div class="d-flex justify-content-between align-items-center">
                                         <div class="btn-group no-transbox">
@@ -96,7 +98,6 @@
         </div>
     </div>
 </main>
-
 
 <footer class="text-muted">
     <div class="container">
