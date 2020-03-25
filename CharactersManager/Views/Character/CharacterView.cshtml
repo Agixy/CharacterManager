@@ -94,14 +94,14 @@
                     <div class="col-md-6 mb-3">
                         <label for="relationships">Związki<span class="text-muted"></span></label>
 
-
                         <div id="relationships">
                             @{
                                 if (Model.Relationships != null)
                                 {
                                     foreach (var item in Model.Relationships)
                                     {
-                                        var existingCharacter = characters.FirstOrDefault(ch => ch.Value.Equals(item));
+                                        var name = item.Split("-").First();
+                                        var existingCharacter = characters.FirstOrDefault(ch => ch.Value.Equals(name));
 
                                         if (existingCharacter.Value != null)
                                         {

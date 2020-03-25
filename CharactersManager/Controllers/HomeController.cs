@@ -172,13 +172,13 @@ namespace CharactersManager.Controllers
         }
 
         [HttpPost]
-        public void AddRelationship(int characterId, int relationshipCharacterId, string relationship)
+        public void AddRelationship(int characterId, string relationshipCharacterName, string relationship)
         {
             var list = HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships")?? new List<RelationshipViewModel>();
             list.Add(new RelationshipViewModel()
             {
                 Type = relationship,
-                TargetRelationshipCharacterId = relationshipCharacterId,
+                TargetRelationshipCharacterName = relationshipCharacterName,
                 CharacterId = characterId
             });
             HttpContext.Session.SetComplexData("NewRelationships", list);
