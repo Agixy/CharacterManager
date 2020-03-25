@@ -27,13 +27,11 @@ function ReloadRelationships(characterId, relationshipCharName, relationshipType
             
         });
 
-        //newRelationship.push("<a href='/Home/CharacterView/" + relationshipCharId + "'>" + relationshipCharName + " - " + relationshipType + "</a><br>");
-
-            $.ajax({
-                type: 'POST',
-                url: '/Home/AddRelationship',
-                data: { characterId: characterId, relationshipCharacterName: relationshipCharName, relationship: relationshipType }
-            });
+        $.ajax({
+            type: 'POST',
+            url: '/Home/AddRelationship',
+            data: { characterId: characterId, relationshipCharacterName: relationshipCharName, relationship: relationshipType }
+        });
     }      
    
     CloseAddRelationshipModal();    

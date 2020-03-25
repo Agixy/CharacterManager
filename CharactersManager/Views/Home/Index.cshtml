@@ -3,8 +3,6 @@
 @{
     ViewData["Title"] = "Home Page";
     IDictionary<int, string> breeds = ViewData["Breeds"] as Dictionary<int, string>;
-
-
 }
 
 
@@ -19,8 +17,6 @@
             </p>
         </div>
     </div>
-
-
 
     <div class="row">
         @{
@@ -60,23 +56,19 @@
         <div class="col-md-2 mb-3">
             <button onClick="location.href='@Url.Action("CreateNewCharacter", "Home")'" class="btn-add-character force-to-bottom-left blue-btn" value="Save">Dodaj postać</button>
         </div>
-
-
-
     </div>
 
     <div class="album py-5">
         <div class="container ">
-
             <div class="row">
-
                 @{
                     foreach (var character in Model)
                     {
-
                         <div class="col-md-4">
                             <div class="card mb-4 shadow-sm">
-                                <img src="@Url.Content(character.Images.FirstOrDefault()?.ImageData)" height="250" width="250">
+                                <div class="text-center mt-3">                                    
+                                     <img src="@Url.Content(character.Images.FirstOrDefault(i => i.IsAvatar)?.ImageData)" height="290" width="290">
+                                </div>
                                 <div class="card-body">
                                     <p class="card-text">
                                         @character.DisplayName
@@ -92,7 +84,6 @@
                             </div>
                         </div>
                     }
-
                 }
             </div>
         </div>

@@ -1,6 +1,5 @@
 ﻿@model CharacterViewModel
 
-
 @{
     IDictionary<int, string> characters = ViewData["Characters"] as Dictionary<int, string>;
     ViewData["CharacterId"] = Model.Id;
@@ -26,6 +25,7 @@
         <div class="col-md-6 mb-3">
             <form asp-action="UploadImage"
                   asp-controller="Home"
+                  asp-route-characterId="@Model.Id"
                   method="post"
                   enctype="multipart/form-data">
                 <input type="file" id="file1"
@@ -33,22 +33,16 @@
                        multiple="multiple" />
                 <button class="blue-btn" type="submit">Zapisz zdjęcie</button>
             </form>
-
         </div>
-        @*<h1>@ViewBag.Message</h1>
-            <h1>@ViewBag.ImageTitle</h1>
-            <img src="@ViewBag.ImageDataUrl" />*@
-
-
-
     </div>
+
     <hr class="mb-4" style="background-color: #97a6b4">
 
     <div class="row">
         <div class="col-md-10 order-md-1">
             <h4 class="mb-3">Informacje ogólne</h4>
 
-            <form class="needs-validation" method="post" action="@Url.Action("Save", "Home", Model)">
+             <form class="needs-validation" method="post" action="@Url.Action("Save", "Home", Model)">
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="Name">Imie</label>
@@ -117,7 +111,6 @@
                                         }
                                     }
                                 }
-
                             }
                         </div>
                     </div>
@@ -158,7 +151,6 @@
             </form>
         </div>
     </div>
-
 
 
     <footer class="my-5 pt-5 text-muted text-center text-small">

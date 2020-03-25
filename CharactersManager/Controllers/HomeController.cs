@@ -54,26 +54,10 @@ namespace CharactersManager.Controllers
             {
                 AllImages = context.Images.ToList();
             }
-        }
-
-        public string GetAvatar()
-        {
-            using (var context = new ImageDbContext())
-            {
-                Image img = context.Images.OrderByDescending
-             (i => i.Id).FirstOrDefault();
-                string imageBase64Data =
-            Convert.ToBase64String(img.ImageData);
-               return string.Format("data:image/jpg;base64,{0}",
-            imageBase64Data);
-
-                
-            }
-        }
+        }   
 
         public IActionResult Index()
-        {
-            
+        {            
             var characters = AllCharacters.Select(x => _mapper.Map<CharacterViewModel>(x)).OrderBy(ch => ch.Name).ToList();
 
             foreach (var item in characters)
@@ -107,7 +91,6 @@ namespace CharactersManager.Controllers
         [HttpPost]
         public IActionResult Save(CharacterViewModel characterViewModel)
         {
-
             var mapper = new CharacterViewToModelMapper();
             var character = mapper.MapToModel(characterViewModel);
 
@@ -122,7 +105,15 @@ namespace CharactersManager.Controllers
                     character.Appearance.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Appearance.Id;
                     character.Personality.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Personality.Id;
                     character.Origin.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Origin.Id;
-                    character.Relationships += "," + String.Join(",", HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships").Select(r => r.TargetRelationshipCharacterName + "-" + r.Type));
+                    if(character.Relationships.Length == 0)
+                    {
+                        character.Relationships = String.Join(",", HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships").Select(r => r.TargetRelationshipCharacterName + "-" + r.Type));
+                    }
+                    else
+                    {
+                        character.Relationships += "," + String.Join(",", HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships").Select(r => r.TargetRelationshipCharacterName + "-" + r.Type));
+                    }
+                    
 
                     context.Characters.Update(character);                   
                 }             
@@ -138,7 +129,7 @@ namespace CharactersManager.Controllers
         {
             using (var context = new CharacterDbContext())
             {
-                var character = context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).Include(ch => ch.Relationships)
+                var character = context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality)
                     .FirstOrDefault(ch => ch.Id == characterId);
 
                 context.Origins.Remove(character.Origin);
@@ -195,49 +186,17 @@ namespace CharactersManager.Controllers
         {
             var relationships = AllCharacters.FirstOrDefault(ch => ch.Id == characterId).Relationships;
             return Json(relationships);
-        }
-    
+        }    
 
         [HttpGet]
         public IActionResult GetAllCharacters()
         {
             var characters = AllCharacters.ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);
             return Json(characters);
-        }
-
-
-        [HttpPost]
-        public IActionResult AddImage()
-        {
-            byte[] bytes;
-
-            foreach (var file in Request.Form.Files)
-            {
-                // http://www.binaryintellect.net/articles/2f55345c-1fcb-4262-89f4-c4319f95c5bd.aspx
-                // https://docs.microsoft.com/en-us/learn/modules/publish-azure-web-app-with-visual-studio/7-exercise-publish-an-update-to-your-site
-                // https://github.com/aspnet/Tooling/blob/AspNetVMs/docs/create-asp-net-vm-with-webdeploy.md
-                // https://www.codeproject.com/Articles/786085/ASP-NET-MVC-List-Editor-with-Bootstrap-Modals
-                // https://portal.azure.com/?quickstart=true#@aglowacka224gmail.onmicrosoft.com/resource/subscriptions/f8828453-cf83-42a4-b5c5-184f7eb75b81/resourceGroups/Characters/providers/Microsoft.Web/sites/ApocalyptusArt/appServices
-
-                //Image img = new Image();
-                //img.ImageTitle = file.FileName;
-
-                //MemoryStream ms = new MemoryStream();
-                //file.CopyTo(ms);
-                //img.ImageData = ms.ToArray();
-
-                //ms.Close();
-                //ms.Dispose();
-
-                //db.Images.Add(img);
-                //db.SaveChanges();
-            }
-
-            return View("~/Views/Character/CharacterView.cshtml", new CharacterViewModel());
-        }
+        }      
 
         [HttpPost]
-        public IActionResult UploadImage()
+        public IActionResult UploadImage(int characterId)
         {
             foreach (var file in Request.Form.Files)
             {
@@ -246,10 +205,9 @@ namespace CharactersManager.Controllers
 
                 MemoryStream ms = new MemoryStream();
                 file.CopyTo(ms);
-                img.CharacterId = 3;
-                img.ImageTitle = "Cos";
-                img.ImageData = ms.ToArray();
                 img.IsAvatar = true;
+                img.CharacterId = characterId;
+                img.ImageData = ms.ToArray();
 
                 ms.Close();
                 ms.Dispose();
@@ -258,32 +216,10 @@ namespace CharactersManager.Controllers
                 {
                     context.Images.Add(img);
                     context.SaveChanges();
-                }
-           
+                }           
             }
 
-            return Redirect("/Home/Index");
-        }
-
-        [HttpPost]
-        public ActionResult RetrieveImage()
-        {
-            using (var context = new ImageDbContext())
-            {
-                Image img = context.Images.OrderByDescending
-             (i => i.Id).SingleOrDefault();
-                string imageBase64Data =
-            Convert.ToBase64String(img.ImageData);
-                string imageDataURL =
-            string.Format("data:image/jpg;base64,{0}",
-            imageBase64Data);
-                ViewBag.ImageTitle = img.ImageTitle;
-                ViewBag.ImageDataUrl = imageDataURL;
-
-                ViewData["Breeds"] = Breeds;
-
-                return View("Index", AllCharacters.Select(x => _mapper.Map<CharacterViewModel>(x)).ToList());
-            }         
+            return Redirect($"/Home/CharacterView?characterId={characterId}");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
@@ -292,6 +228,7 @@ namespace CharactersManager.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
     }
+
     public static class SessionExtensions
     {
         public static T GetComplexData<T>(this ISession session, string key)
