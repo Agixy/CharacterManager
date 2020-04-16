@@ -1,4 +1,5 @@
-﻿using Service.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,8 +18,40 @@ namespace Service
         {
             using (var context = new CharacterDbContext())
             {
-                return context.Characters.ToList();
+                return context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).ToList(); ;
             }                      
+        }
+
+        public List<Breed> GetAllBreeds()
+        {
+            using (var context = new CharacterDbContext())
+            {
+                return context.Breeds.ToList();
+            }
+        }
+
+        public List<Orientation> GetOrientations()
+        {
+            using (var context = new CharacterDbContext())
+            {
+                return context.Orientations.ToList();
+            }
+        }
+
+        public List<TypeOfCharacter> GetTypesOfCharacter()
+        {
+            using (var context = new CharacterDbContext())
+            {
+                return context.TypeOfCharacters.ToList();
+            }
+        }
+
+        public List<AlignmentChart> GetAlignmentChatrs()
+        {
+            using (var context = new CharacterDbContext())
+            {
+                return context.AlignmentCharts.ToList();
+            }
         }
 
         public List<Image> GetAllImages()

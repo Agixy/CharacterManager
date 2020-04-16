@@ -25,7 +25,7 @@ namespace CharactersManager.Controllers
         private IList<Character> AllCharacters;
         private IList<Image> AllImages;
         private Dictionary<int, string> Breeds;
-        private Dictionary<int, string> TypeOfCharacters;
+        private Dictionary<int, string> TypesOfCharacter;
         private Dictionary<int, string> Orientations;
         private Dictionary<int, string> AlignmentCharts;
 
@@ -41,19 +41,13 @@ namespace CharactersManager.Controllers
 
         private void LoadAllData()
         {
-            using (var context = new CharacterDbContext())
-            {
-                AllCharacters = context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).ToList();
-                Breeds = context.Breeds.ToDictionary(b => b.Id, b => b.Name);
-                TypeOfCharacters = context.TypeOfCharacters.ToDictionary(b => b.Id, b => b.Name);
-                Orientations = context.Orientations.ToDictionary(b => b.Id, b => b.Name);
-                AlignmentCharts = context.AlignmentCharts.ToDictionary(b => b.Id, b => b.Name);
-            }
+            AllCharacters = service.GetAllCharacters();
+            Breeds = service.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
+            TypesOfCharacter = service.GetTypesOfCharacter().ToDictionary(b => b.Id, b => b.Name);
+            Orientations = service.GetOrientations().ToDictionary(b => b.Id, b => b.Name);
+            AlignmentCharts = service.GetAlignmentChatrs().ToDictionary(b => b.Id, b => b.Name);
 
-            using (var context = new ImageDbContext())
-            {
-                AllImages = context.Images.ToList();
-            }
+            AllImages = service.GetAllImages();
         }   
 
         public IActionResult Index()
@@ -77,7 +71,7 @@ namespace CharactersManager.Controllers
             result.Images = AllImages.Where(i => i.CharacterId == character.Id).Select(i => _mapper.Map<ImageViewModel>(i)).ToList();
 
             ViewData["Characters"] = AllCharacters.ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);
-            ViewData["TypeOfCharacters"] = TypeOfCharacters;
+            ViewData["TypeOfCharacters"] = TypesOfCharacter;
             ViewData["Orientations"] = Orientations;
             ViewData["AlignmentCharts"] = AlignmentCharts;
             ViewData["Breeds"] = Breeds;
@@ -85,7 +79,7 @@ namespace CharactersManager.Controllers
             return View("~/Views/Character/CharacterView.cshtml", result);
         }
 
-        public IActionResult AboutBooks()
+        public IActionResult Dictionary()
         {
             return View();
         }
@@ -98,16 +92,16 @@ namespace CharactersManager.Controllers
 
             using (var context = new CharacterDbContext())
             {
-                if(characterViewModel.Id == 0)
-                {             
+                if (characterViewModel.Id == 0)
+                {
                     context.Characters.Add(character);
                 }
                 else
-                {                    
+                {
                     character.Appearance.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Appearance.Id;
                     character.Personality.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Personality.Id;
                     character.Origin.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Origin.Id;
-                    var relationships = HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships");                 
+                    var relationships = HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships");
                     if (character.Relationships.Length == 0 && relationships != null)
                     {
                         character.Relationships = String.Join(",", relationships.Select(r => r.TargetRelationshipCharacterName + "-" + r.Type));
@@ -116,10 +110,10 @@ namespace CharactersManager.Controllers
                     {
                         character.Relationships += "," + relationships.Select(r => r.TargetRelationshipCharacterName + "-" + r.Type);
                     }
-                    
 
-                    context.Characters.Update(character);                   
-                }             
+
+                    context.Characters.Update(character);
+                }
 
                 context.SaveChanges();
                 HttpContext.Session.Clear();
@@ -150,7 +144,7 @@ namespace CharactersManager.Controllers
             var newCharacter = new CharacterViewModel();
 
             ViewData["Characters"] = AllCharacters.ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);
-            ViewData["TypeOfCharacters"] = TypeOfCharacters;
+            ViewData["TypeOfCharacters"] = TypesOfCharacter;
             ViewData["Orientations"] = Orientations ;
             ViewData["AlignmentCharts"] = AlignmentCharts;
             ViewData["Breeds"] = Breeds;
@@ -219,7 +213,7 @@ namespace CharactersManager.Controllers
                 {
                     context.Images.Add(img);
                     context.SaveChanges();
-                }           
+                }
             }
 
             return Redirect($"/Home/CharacterView?characterId={characterId}");
