@@ -18,7 +18,7 @@
     </div>
 
     @{
-        Html.RenderPartial("~/Views/Character/Gallery.cshtml");
+        Html.RenderPartial("~/Views/Character/Gallery.cshtml", Model.Images);
     }
 
     <div class="row">
@@ -97,17 +97,20 @@
                                         var name = item.Split("-").First();
                                         var existingCharacter = characters.FirstOrDefault(ch => ch.Value.Equals(name));
 
-                                        if (existingCharacter.Value != null)
+                                        if (item.Length > 0)
                                         {
-                                            <p>
-                                                <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = existingCharacter.Key })'" class="btn-relation-char">@item</button>
-                                            </p>
-                                        }
-                                        else
-                                        {
-                                            <p>
-                                                <button type="button" class="btn-relation-char">@item</button>
-                                            </p>
+                                            if (existingCharacter.Value != null)
+                                            {
+                                                <p>
+                                                    <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = existingCharacter.Key })'" class="btn-relation-char">@item</button>
+                                                </p>
+                                            }
+                                            else
+                                            {
+                                                <p>
+                                                    <button type="button" class="btn-relation-char">@item</button>
+                                                </p>
+                                            }
                                         }
                                     }
                                 }
@@ -147,18 +150,15 @@
                     @Html.HiddenFor(m => m.Origin.BookIds[i])
                 }
 
-                <input type="submit" value="Zapisz" onclick="ClearTemporaryJSArrays()" class="btn btn-primary btn-lg btn-block" />
+             <div>
+                 <input type="submit" value="Zapisz" onclick="ClearTemporaryJSArrays()" class="blue-btn save-btn" />
+             </div>
+               
             </form>
         </div>
     </div>
 
 
-    <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">&copy; 2017-{{ site.time | date: "%Y" }} Company Name</p>
-        <ul class="list-inline">
-            <li class="list-inline-item"><a href="#">Privacy</a></li>
-            <li class="list-inline-item"><a href="#">Terms</a></li>
-            <li class="list-inline-item"><a href="#">Support</a></li>
-        </ul>
+    <footer class="my-5 pt-5 text-muted text-center text-small">        
     </footer>
 </div>

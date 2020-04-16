@@ -12,8 +12,6 @@
             <h1>Uniwersum Wordenii</h1>
             <p class="lead text-muted">Biblioteka postaci ze wszystkich książek z uniwersum Wordenii.</p>
             <p>
-                <a href="#" class="btn btn-primary my-2">Main call to action</a>
-                <a href="#" class="btn btn-secondary my-2">Secondary action</a>
             </p>
         </div>
     </div>
@@ -33,9 +31,6 @@
             <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Breed" required>
                 <option value="">Wybierz...</option>
             </select>
-            <div class="invalid-feedback">
-                Please select a valid country.
-            </div>
         </div>
 
 
@@ -44,9 +39,6 @@
             <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Other" required>
                 <option value="">Wybierz...</option>
             </select>
-            <div class="invalid-feedback">
-                Please select a valid country.
-            </div>
         </div>
 
         <div class="col-md-2 mb-3">
@@ -78,7 +70,6 @@
                                             <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = character.Id })'" class="btn btn-sm btn-outline-secondary">Edytuj</button>
                                             <button onClick="location.href='@Url.Action("DeleteCharacter", "Home", new { characterId = character.Id })'" class="btn btn-sm btn-outline-secondary">Usuń</button>
                                         </div>
-                                        <small class="text-muted">9 mins</small>
                                     </div>
                                 </div>
                             </div>
@@ -93,10 +84,8 @@
 <footer class="text-muted">
     <div class="container">
         <p class="float-right">
-            <a href="#">Back to top</a>
+            <a href="#">Powrót na górę</a>
         </p>
-        <p></p>
-        <p>New to Bootstrap? <a href="{{ site.url }}/">Visit the homepage</a> or read our <a href="{{ site.baseurl }}/docs/{{ site.docs_version }}/getting-started/introduction/">getting started guide</a>.</p>
-    </div>
+        </div>
 </footer>
 

@@ -1,6 +1,6 @@
-﻿<!--Carousel Wrapper-->
+﻿@model List<ImageViewModel>
 
-@*<link rel="stylesheet" href="~/lib/bootstrap-4.4.1">*@
+<!--Carousel Wrapper-->
 
 <link rel="stylesheet" href="https://mdbootstrap.com/api/snippets/static/download/MDB-Pro_4.13.0/css/mdb.min.css">
 <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
@@ -34,35 +34,25 @@
         <!--First slide-->
         <div class=" carousel-item active text-center">
 
+            <figure class="col-md-4 d-md-inline-block">             
+                <img src=""  class="img-fluid">             
+            </figure>
+
             <figure class="col-md-4 d-md-inline-block">
-                <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(2).jpg"
-                   data-size="1600x1067">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(2).jpg"
-                         class="img-fluid">
+                <a href="@Url.Content(Model.FirstOrDefault()?.ImageData)" data-size="1600x1067">
+                <img src="@Url.Content(Model.FirstOrDefault()?.ImageData)" class="img-fluid">
                 </a>
             </figure>
 
             <figure class="col-md-4 d-md-inline-block">
-                <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(4).jpg"
-                   data-size="1600x1067">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(4).jpg"
-                         class="img-fluid">
-                </a>
+                <img src="" class="img-fluid">
             </figure>
 
-            <figure class="col-md-4 d-md-inline-block">
-                <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(6).jpg"
-                   data-size="1600x1067">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(6).jpg"
-                         class="img-fluid">
-                </a>
-            </figure>
- 
 
         </div>
         <!--/.First slide-->
         <!--Second slide-->
-        <div class="carousel-item text-center">
+        @*<div class="carousel-item text-center">
 
             <figure class="col-md-4 d-md-inline-block">
                 <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(22).jpg"
@@ -90,10 +80,10 @@
 
                    
 
-        </div>
+        </div>*@
         <!--/.Second slide-->
         <!--Third slide-->
-        <div class="carousel-item text-center">
+        @*<div class="carousel-item text-center">
 
             <figure class="col-md-4 d-md-inline-block">
                 <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(44).jpg"
@@ -120,7 +110,7 @@
             </figure>
   
 
-        </div>
+        </div>*@
         <!--/.Third slide-->
 
     </div>

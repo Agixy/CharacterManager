@@ -73,7 +73,9 @@ namespace CharactersManager.Controllers
         {
             var character = AllCharacters.FirstOrDefault(ch => ch.Id == characterId);
             var result = _mapper.Map<CharacterViewModel>(character);
-         
+
+            result.Images = AllImages.Where(i => i.CharacterId == character.Id).Select(i => _mapper.Map<ImageViewModel>(i)).ToList();
+
             ViewData["Characters"] = AllCharacters.ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);
             ViewData["TypeOfCharacters"] = TypeOfCharacters;
             ViewData["Orientations"] = Orientations;
@@ -83,7 +85,7 @@ namespace CharactersManager.Controllers
             return View("~/Views/Character/CharacterView.cshtml", result);
         }
 
-        public IActionResult Privacy()
+        public IActionResult AboutBooks()
         {
             return View();
         }
@@ -105,13 +107,14 @@ namespace CharactersManager.Controllers
                     character.Appearance.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Appearance.Id;
                     character.Personality.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Personality.Id;
                     character.Origin.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Origin.Id;
-                    if(character.Relationships.Length == 0)
+                    var relationships = HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships");                 
+                    if (character.Relationships.Length == 0 && relationships != null)
                     {
-                        character.Relationships = String.Join(",", HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships").Select(r => r.TargetRelationshipCharacterName + "-" + r.Type));
+                        character.Relationships = String.Join(",", relationships.Select(r => r.TargetRelationshipCharacterName + "-" + r.Type));
                     }
-                    else
+                    else if (relationships != null)
                     {
-                        character.Relationships += "," + String.Join(",", HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships").Select(r => r.TargetRelationshipCharacterName + "-" + r.Type));
+                        character.Relationships += "," + relationships.Select(r => r.TargetRelationshipCharacterName + "-" + r.Type);
                     }
                     
 

@@ -8,7 +8,6 @@ namespace Service
 {
     public class Service                    // TODO: Move all database loading from controller here
     {      
-
         public Service()
         {
             CreateDatabase();
