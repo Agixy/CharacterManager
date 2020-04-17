@@ -79,7 +79,7 @@ namespace CharactersManager.Controllers
             return View("~/Views/Character/CharacterView.cshtml", result);
         }
 
-        public IActionResult Dictionary()
+        public IActionResult Informations()
         {
             return View();
         }
