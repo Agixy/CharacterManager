@@ -84,6 +84,12 @@ namespace CharactersManager.Controllers
             return View();
         }
 
+        public IActionResult FullSizeImage(int imageId)
+        {
+            var image = _mapper.Map<ImageViewModel>(AllImages.FirstOrDefault(i => i.Id == imageId));
+            return View("~/Views/Character/FullSizeImage.cshtml", image);
+        }
+
         [HttpPost]
         public IActionResult Save(CharacterViewModel characterViewModel)
         {

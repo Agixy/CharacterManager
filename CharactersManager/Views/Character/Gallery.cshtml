@@ -7,7 +7,6 @@
 <link rel="stylesheet" href="https://z9t4u9f6.stackpathcdn.com/wp-content/themes/mdbootstrap4/css/compiled-4.13.0.min.css">
 
 
-
 <div id="carousel-with-lb" class="carousel slide carousel-multi-item" data-ride="carousel">
 
     <!--Controls-->
@@ -34,87 +33,27 @@
         <!--First slide-->
         <div class=" carousel-item active text-center">
 
-            <figure class="col-md-4 d-md-inline-block">             
-                <img src=""  class="img-fluid">             
-            </figure>
+            @{
+                var imageCounter = 0;
+            }
 
-            <figure class="col-md-4 d-md-inline-block">
-                <a href="@Url.Content(Model.FirstOrDefault()?.ImageData)" data-size="1600x1067">
-                <img src="@Url.Content(Model.FirstOrDefault()?.ImageData)" class="img-fluid">
+            @foreach (var image in Model)
+            {
+                @if(imageCounter == 3)
+                 {
+                     @:</div>
+                     @: <div class=" carousel-item text-center">
+                 }
+
+            <div class="col-md-4 d-md-inline-block gallery-item">
+                <a href="@Url.Action("FullSizeImage", "Home", image)">
+                    <img src="@image.ImageData" class="img-fluid">
                 </a>
-            </figure>
-
-            <figure class="col-md-4 d-md-inline-block">
-                <img src="" class="img-fluid">
-            </figure>
-
+            </div>
+                imageCounter++;
+            }
 
         </div>
-        <!--/.First slide-->
-        <!--Second slide-->
-        @*<div class="carousel-item text-center">
-
-            <figure class="col-md-4 d-md-inline-block">
-                <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(22).jpg"
-                   data-size="1600x1067">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(22).jpg"
-                         class="img-fluid">
-                </a>
-            </figure>
-
-            <figure class="col-md-4 d-md-inline-block">
-                <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(25).jpg"
-                   data-size="1600x1067">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(25).jpg"
-                         class="img-fluid">
-                </a>
-            </figure>
-
-            <figure class="col-md-4 d-md-inline-block">
-                <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(29).jpg"
-                   data-size="1600x1067">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(29).jpg"
-                         class="img-fluid">
-                </a>
-            </figure>
-
-                   
-
-        </div>*@
-        <!--/.Second slide-->
-        <!--Third slide-->
-        @*<div class="carousel-item text-center">
-
-            <figure class="col-md-4 d-md-inline-block">
-                <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(44).jpg"
-                   data-size="1600x1067">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(44).jpg"
-                         class="img-fluid">
-                </a>
-            </figure>
-
-            <figure class="col-md-4 d-md-inline-block">
-                <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(45).jpg"
-                   data-size="1600x1067">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(45).jpg"
-                         class="img-fluid">
-                </a>
-            </figure>
-
-            <figure class="col-md-4 d-md-inline-block">
-                <a href="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(66).jpg"
-                   data-size="1600x1067">
-                    <img src="https://mdbootstrap.com/img/Photos/Horizontal/Nature/4-col/img%20(66).jpg"
-                         class="img-fluid">
-                </a>
-            </figure>
-  
-
-        </div>*@
-        <!--/.Third slide-->
-
     </div>
-    <!--/.Slides-->
-
 </div>
 <!--/.Carousel Wrapper-->

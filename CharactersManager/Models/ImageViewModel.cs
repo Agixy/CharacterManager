@@ -7,6 +7,7 @@ namespace CharactersManager.Models
 {
     public class ImageViewModel
     {
+        public int Id { get; set; }
         public int CharacterId { get; set; }
         public bool IsAvatar { get; set; }
         public string ImageTitle { get; set; }
