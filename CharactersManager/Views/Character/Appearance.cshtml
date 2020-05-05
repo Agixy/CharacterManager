@@ -19,7 +19,7 @@
 <div class="row">
     <div class="col-md-6 mb-3">
         <label for="Breed">Rasa</label>
-        <select class="custom-select d-block w-100" asp-for="Appearance.BreedId" asp-items="selectItemList" oninvalid="this.setCustomValidity('Wybierz rasę.')" required>
+        <select class="custom-select d-block w-100 need-password" asp-for="Appearance.BreedId" asp-items="selectItemList" oninvalid="this.setCustomValidity('Wybierz rasę.')" required>
             <option value="">Wybierz...</option>
         </select>        
     </div>
@@ -28,7 +28,7 @@
 
     <div class="col-md-6 mb-6">
         <label>Typ budowy ciała (waga)</label>
-        <input type="text" class="form-control" asp-for="Appearance.BodyType" placeholder="" value="@Model.Appearance.BodyType">
+        <input type="text" class="form-control need-password" asp-for="Appearance.BodyType" placeholder="" value="@Model.Appearance.BodyType">
     </div>
 
 </div>
@@ -36,7 +36,7 @@
 <div class="row">
     <div class="col-md-6 mb-3">
         <label>Wzrost</label>
-        <input type="text" class="form-control" asp-for="Appearance.Tall" placeholder="" value="@Model.Appearance.Tall">  
+        <input type="text" class="form-control need-password" asp-for="Appearance.Tall" placeholder="" value="@Model.Appearance.Tall">  
     </div>
 
 </div>
@@ -45,7 +45,7 @@
 <div class="row">
     <div class="col-md-12 mb-3 abc">
         @Html.LabelFor(model => model.Appearance.Description, "Cechy Szczególne", new { @class = "control-label col-md-12 row" })
-        @Html.TextAreaFor(m => m.Appearance.Description, new { @class = "textarea" })     
+        @Html.TextAreaFor(m => m.Appearance.Description, new { @class = "textarea need-password" })     
     </div>
 </div>
 

@@ -13,18 +13,18 @@
 <div class="row">
     <div class="col-md-12 mb-3 abc">
         @Html.LabelFor(model => model.Personality.CharacterTraits, "Cechy charakteru", new { @class = "control-label col-md-12 row" })
-        @Html.TextAreaFor(m => m.Personality.CharacterTraits, new { @class = "textarea" })      
+        @Html.TextAreaFor(m => m.Personality.CharacterTraits, new { @class = "textarea need-password" })      
     </div>
 </div>
 
 <div class="row">
     <div class="col-md-6 mb-3">
         <label for="Values">Wartości</label>
-        <input type="text" class="form-control" id="Values" asp-for="Personality.Values" placeholder="" value="@Model.Personality.Values">      
+        <input type="text" class="form-control need-password" id="Values" asp-for="Personality.Values" placeholder="" value="@Model.Personality.Values">      
     </div>
     <div class="col-md-6 mb-3">
         <label for="Ambitions">Ambicje<span class="text-muted"></span></label>
-        <input type="text" class="form-control" asp-for="Personality.Ambitions" id="Ambitions" placeholder="">       
+        <input type="text" class="form-control need-password" asp-for="Personality.Ambitions" id="Ambitions" placeholder="">       
     </div>
 </div>
 
@@ -41,7 +41,7 @@
 <div class="row">
     <div class="col-md-6 mb-3">
         <label for="TypeOfCharacter">Typ charakteru</label>
-        <select class="custom-select d-block w-100" asp-for="Personality.TypeOfCharacterId" asp-items="@typesOfCharactersList" id="TypeOfCharacter" 
+        <select class="custom-select d-block w-100 need-password" asp-for="Personality.TypeOfCharacterId" asp-items="@typesOfCharactersList" id="TypeOfCharacter" 
                 value="@Model.Personality.TypeOfCharacterId" oninvalid="this.setCustomValidity('Wybierz typ charakteru.')" required>
             <option value="">Wybierz...</option>
         </select>      
@@ -59,7 +59,7 @@
 
     <div class="col-md-6 mb-3">
         <label for="SexualOrientation">Orientacja</label>
-        <select class="custom-select d-block w-100" asp-for="Personality.OrientationId" asp-items="@orientationList" id="SexualOrientation" 
+        <select class="custom-select d-block w-100 need-password" asp-for="Personality.OrientationId" asp-items="@orientationList" id="SexualOrientation" 
                 value="@Model.Personality.OrientationId" oninvalid="this.setCustomValidity('Wybierz orientację.')" required>
             <option value="">Wybierz...</option>
         </select>        
@@ -79,7 +79,7 @@
 <div class="row">
     <div class="col-md-6 mb-3">
         <label for="Breed">Aligment chart</label>
-        <select class="custom-select d-block w-100" asp-for="Personality.AligmentChartId" asp-items="@aligmentChartList" id="Breed"
+        <select class="custom-select d-block w-100 need-password" asp-for="Personality.AligmentChartId" asp-items="@aligmentChartList" id="Breed"
                 value="@Model.Personality.TypeOfCharacterId" oninvalid="this.setCustomValidity('Wybierz aligment chart.')" required>
             <option value="">Wybierz...</option>
         </select>
@@ -90,7 +90,7 @@
 
     <div class="col-md-6 mb-3">
         <label for="Intrestings">Zainteresowania<span class="text-muted"></span></label>
-        <input type="text" class="form-control" asp-for="Personality.Intrestings" id="Intrestings" placeholder="">      
+        <input type="text" class="form-control need-password" asp-for="Personality.Intrestings" id="Intrestings" placeholder="">      
     </div>
 
 </div>
@@ -99,7 +99,7 @@
 
     <div class="col-md-12 mb-3">
         <label for="TheBiggestFear">Największy lęk<span class="text-muted"></span></label>
-        <input type="text" class="form-control" asp-for="Personality.TheBiggestFear" id="TheBiggestFear" placeholder="">        
+        <input type="text" class="form-control need-password" asp-for="Personality.TheBiggestFear" id="TheBiggestFear" placeholder="">        
     </div>
 
 </div>
@@ -108,12 +108,12 @@
 <div class="row">
     <div class="col-md-6 mb-3">
         @Html.LabelFor(model => model.Personality.PoliticalViews, "Poglądy polityczne", new { @class = "control-label col-md-12 row" })
-        @Html.TextAreaFor(m => m.Personality.PoliticalViews, new { @class = "textarea", @rows = "7" })       
+        @Html.TextAreaFor(m => m.Personality.PoliticalViews, new { @class = "textarea need-password", @rows = "7" })       
     </div>
 
     <div class="col-md-6 mb-3">
         @Html.LabelFor(model => model.Personality.AdditionalInformation, "Dodatkowe info", new { @class = "control-label col-md-12 row" })
-        @Html.TextAreaFor(m => m.Personality.AdditionalInformation, new { @class = "textarea", @rows = "7" })     
+        @Html.TextAreaFor(m => m.Personality.AdditionalInformation, new { @class = "textarea need-password", @rows = "7" })     
     </div>
 </div>
 

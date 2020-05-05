@@ -6,6 +6,23 @@ var relationships = [];
 var addRelationshipModal = document.getElementById("addModal");
 var closeButtonsArray = document.getElementsByClassName("close");
 
+DisableAllInputs();
+
+function DisableAllInputs() {
+    $('.need-password').attr("disabled", "disabled");
+    $('#addRelationshipBtn').hide();
+    $('#editMother').hide();
+    $('#editFather').hide();
+    $('#addNewCharacter').hide()    
+    $('.btn-delete-char').hide()    
+    
+    $('input:submit').hide();
+};
+
+function EnableAllInputs() {
+    $('.need-password').attr("disabled", "");
+};
+
 function ReloadRelationships(characterId, relationshipCharName, relationshipType) {  
     var newRelationship = [];
 

@@ -46,11 +46,11 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="Name">Imie</label>
-                        <input type="text" class="form-control" name="Name" id="Name" placeholder="" value="@Model.Name">
+                        <input type="text" class="form-control need-password" name="Name" id="Name" placeholder="" value="@Model.Name">
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="Spieces">Nazwisko</label>
-                        <input type="text" class="form-control" name="Surname" id="Surname" placeholder="" value="@Model.Surname">
+                        <input type="text" class="form-control need-password" name="Surname" id="Surname" placeholder="" value="@Model.Surname">
                     </div>
                 </div>
 
@@ -58,18 +58,18 @@
 
                     <div class="col-md-6 mb-3">
                         <label for="BirthErrar">Errar urodzenia<span class="text-muted"></span></label>
-                        <input asp-for="BirthErrar" type="number" class="form-control" placeholder="">
+                        <input asp-for="BirthErrar" type="number" class="form-control need-password" placeholder="">
                     </div>
 
                     <div class="col-md-6 mb-3 text-center">
                         <h5>Płeć</h5>
                         <div class="custom-control custom-radio">
-                            <input asp-for="Sex" id="Mężczyzna" type="radio" value="Mężczyzna" class="custom-control-input">
+                            <input asp-for="Sex" id="Mężczyzna" type="radio" value="Mężczyzna" class="custom-control-input need-password">
                             <label class="custom-control-label" for="Mężczyzna"></label>
                             <i class="fa fa-mars col-md-1 mb-2" style="font-size:24px"></i>
                         </div>
                         <div class=" custom-control custom-radio">
-                            <input asp-for="Sex" id="Kobieta" type="radio" value="Kobieta" class="custom-control-input">
+                            <input asp-for="Sex" id="Kobieta" type="radio" value="Kobieta" class="custom-control-input need-password">
                             <label class="custom-control-label" for="Kobieta"></label>
                             <i class="fa fa-venus col-md-1" style="font-size:24px"></i>
                         </div>
@@ -80,7 +80,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="Profesion">Zawód<span class="text-muted"></span></label>
-                        <input asp-for="Profesion" type="text" class="form-control" placeholder="">
+                        <input asp-for="Profesion" type="text" class="form-control need-password" placeholder="">
                     </div>
                 </div>
 

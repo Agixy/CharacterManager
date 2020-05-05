@@ -10,7 +10,7 @@
 <div class="row row-cols-3">
     <div class="col-md-5 mb-3">
         <label>Okręg urodzenia</label>
-        <input type="text" class="form-control" asp-for="Origin.DistrictOfBirth" placeholder="" value="@Model.Origin.DistrictOfBirth">
+        <input type="text" class="form-control need-password" asp-for="Origin.DistrictOfBirth" placeholder="" value="@Model.Origin.DistrictOfBirth">
         <div class="invalid-feedback">
             Zip code required.
         </div>
@@ -52,7 +52,7 @@
     <div class="col-md-5 mb-3">
         <div>
             <label>Okręg zamieszkania</label>
-            <input type="text" class="form-control" asp-for="Origin.DistrictOfResidence" placeholder="Wpisz nazwe" value="@Model.Origin.DistrictOfResidence">
+            <input type="text" class="form-control need-password" asp-for="Origin.DistrictOfResidence" placeholder="Wpisz nazwe" value="@Model.Origin.DistrictOfResidence">
             <div class="invalid-feedback">
                 Please enter your shipping address.
             </div>
