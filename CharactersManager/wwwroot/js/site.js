@@ -4,16 +4,15 @@
 
 var relationships = [];
 var addRelationshipModal = document.getElementById("addModal");
-var closeButtonsArray = document.getElementsByClassName("close");
+var getPasswordModal = document.getElementById("savePasswordModal");
 
 DisableAllInputs();
 
 function DisableAllInputs() {
     $('.need-password').attr("disabled", "disabled");
-    $('#addRelationshipBtn').hide();
+    //$('#addRelationshipBtn').hide();
     $('#editMother').hide();
-    $('#editFather').hide();
-    $('#addNewCharacter').hide()    
+    $('#editFather').hide(); 
     $('.btn-delete-char').hide()    
     
     $('input:submit').hide();
@@ -105,14 +104,28 @@ $(function () {
     });
 });
 
-Array.prototype.forEach.call(closeButtonsArray, function (element) {
-    element.onclick = function () {
+$(function () {
+    $('#addNewCharacter').click(function () {
+        getPasswordModal.style.display = "block";
+    });
+});
+
+$(function () {
+    $('#deleteAnyCharacter').click(function () {
+        getPasswordModal.style.display = "block";
+    });
+});
+
+$(function () {
+    $('#close-add-relation').click(function () {
         addRelationshipModal.style.display = "none";
-        $("#addModal")
-            .find("input[type=text],select")
-            .val('')
-            .end();            
-    }
+    });
+});
+
+$(function () {
+    $('#close-get-pass').click(function () {
+        getPasswordModal.style.display = "none";
+    });
 });
 
 $(function () {
@@ -141,4 +154,20 @@ $(function () {
                 this + "'></option>");
         });       
     });       
+});
+
+$(document).ready(function () {
+    $('#confirm-password').click(function () {
+        $.ajax({            
+            type: 'GET',
+            url: '/Home/IsPasswordCorrect',
+            data: { password: $('#Password').val() },
+            success: function (isPasswordCorrect) {
+                if (isPasswordCorrect) {                    
+                    window.location.assign("/Home/CreateNewCharacter");
+                }               
+            },
+        })
+    });
+   
 });

@@ -49,22 +49,12 @@ a.navbar-brand {
 
 /* Provide sufficient contrast against white background */
 
-
-.btn-filter {
+.btn-album-option {
     width: 180px;
-    height: 60%;    
+    height: 60%;
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
     cursor: pointer;
 }
-
-
-.btn-add-character {
-    width: 180px;
-    height: 60%;    
-    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
-    cursor: pointer;
-}
-
 
 
 /* Sticky footer styles
@@ -194,8 +184,7 @@ body {
     z-index: 1; /* Sit on top */
     padding-top: 100px; /* Location of the box */
     left: 0;
-    top: 0;
-    width: 300px; /* Full width */
+    top: 0;    
     height: 100%; /* Full height */
     overflow: auto; /* Enable scroll if needed */
 }

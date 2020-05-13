@@ -27,27 +27,32 @@
             }
         }
 
-        <div class="col-md-4 mb-3 col">
+        <div class="col-md-3 mb-3 col">
             <label class="filtering-label" for="Breed">Rasa</label>
             <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Breed" required>
                 <option value="">Wybierz...</option>
             </select>
         </div>
 
+        <div class="col-md-2 mb-3">
+            <button class="btn-album-option force-to-bottom-left blue-btn" id="Filter">Filtruj </button>
+        </div>
 
-        <div class="col-md-4 mb-3">
-            <label class="filtering-label" for="Other">Inne wyszukiwanie</label>
-            <select class="custom-select d-block w-100" asp-items="@selectItemList" id="Other" required>
-                <option value="">Wybierz...</option>
-            </select>
+        <div class="col-md-3 mb-3">            
         </div>
 
         <div class="col-md-2 mb-3">
-            <button class="btn-filter force-to-bottom-left blue-btn" id="Filter">Filtruj </button>
+            <button id="addNewCharacter" class="btn-album-option force-to-bottom-left blue-btn" value="Save">Dodaj postać</button>
+            @{
+                Html.RenderPartial("~/Views/Modals/GetSavingPassword.cshtml");
+            }
         </div>
 
         <div class="col-md-2 mb-3">
-            <button id="addNewCharacter" onClick="location.href='@Url.Action("CreateNewCharacter", "Home")'" class="btn-add-character force-to-bottom-left blue-btn" value="Save">Dodaj postać</button>
+            <button id="deleteAnyCharacter" class="btn-album-option force-to-bottom-left blue-btn">Usuń postać</button>
+            @{
+                 //Html.RenderPartial("~/Views/Modals/GetSavingPassword.cshtml");
+            }
         </div>
     </div>
 

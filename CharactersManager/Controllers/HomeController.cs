@@ -127,7 +127,13 @@ namespace CharactersManager.Controllers
 
             return Redirect($"/Home/CharacterView?characterId={character.Id}");
         }
-                
+
+        [HttpGet]
+        public bool IsPasswordCorrect(string password)
+        {
+            return password.Equals("password");
+        }
+
         public IActionResult DeleteCharacter(int characterId)
         {
             using (var context = new CharacterDbContext())
@@ -145,6 +151,7 @@ namespace CharactersManager.Controllers
             return Redirect("/Home/Index");
         }
 
+        [HttpGet]
         public IActionResult CreateNewCharacter()
         {
             var newCharacter = new CharacterViewModel();
