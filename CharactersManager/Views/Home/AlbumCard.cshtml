@@ -1,0 +1,20 @@
+﻿@model AlbumCardViewModel
+
+<div class="col-md-4">
+    <div class="card mb-4 shadow-sm">
+        <div class="text-center mt-3">
+            <img src="@Url.Content(Model.Avatar?.ImageData)" height="290" width="290">
+        </div>
+        <div class="card-body">
+            <p class="card-text">
+                @Model.DisplayName
+            </p>
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="btn-group no-transbox">
+                    <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = Model.Id })'" class="btn btn-sm btn-outline-secondary">Podgląd</button>
+                    <button onClick="location.href='@Url.Action("DeleteCharacter", "Home", new { characterId = Model.Id })'" class="btn btn-sm btn-outline-secondary btn-delete-char">Usuń</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

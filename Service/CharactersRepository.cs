@@ -3,13 +3,13 @@ using Service.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Threading.Tasks;
 
 namespace Service
 {
-    public class Service                    // TODO: Move all database loading from controller here
-    {      
-        public Service()
+    public class CharactersRepository
+    {
+        public CharactersRepository()
         {
             CreateDatabase();
         }
@@ -18,8 +18,8 @@ namespace Service
         {
             using (var context = new CharacterDbContext())
             {
-                return context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).ToList(); ;
-            }                      
+                return context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).ToList();
+            }
         }
 
         public List<Breed> GetAllBreeds()
@@ -62,12 +62,20 @@ namespace Service
             }
         }
 
+        public List<Image> GetAllAvatars()
+        {
+            using (var context = new ImageDbContext())
+            {
+                return context.Images.Where(i => i.IsAvatar == true).ToList();
+            }
+        }
+
         public Character GetCharacterById(int id)
         {
             using (var context = new CharacterDbContext())
             {
-                return context.Characters.FirstOrDefault(ch => ch.Id == id);
-            }            
+                return context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).FirstOrDefault(ch => ch.Id == id);
+            }
         }
 
         public void AddCharacter(Character character)
@@ -76,13 +84,41 @@ namespace Service
             {
                 context.Add(character);
                 context.SaveChanges();
-            }            
+            }
+        }
+
+        public void UpdateCharacter(Character character)
+        {
+            using (var context = new CharacterDbContext())
+            {
+                character.Appearance.Id = context.Characters.FirstOrDefault(ch => ch.Id == character.Id).Appearance.Id;
+                character.Personality.Id = context.Characters.FirstOrDefault(ch => ch.Id == character.Id).Personality.Id;
+                character.Origin.Id = context.Characters.FirstOrDefault(ch => ch.Id == character.Id).Origin.Id;               
+
+                context.Characters.Update(character);
+                context.SaveChanges();
+            }
+        }
+
+        public void DeleteCharacter(int characterId)
+        {
+            using (var context = new CharacterDbContext())
+            {
+                var character = context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality)
+                    .FirstOrDefault(ch => ch.Id == characterId);
+
+                context.Origins.Remove(character.Origin);
+                context.Pertonalities.Remove(character.Personality);
+                context.Appearances.Remove(character.Appearance);
+                context.Characters.Remove(character);
+                context.SaveChanges();
+            }
         }
 
         private static void CreateDatabase()
         {
             using (var context = new CharacterDbContext())
-            {                
+            {
                 context.Database.EnsureCreated();
                 context.SaveChanges();
             }

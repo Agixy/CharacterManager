@@ -19,64 +19,49 @@ namespace CharactersManager.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly Service.Service service;
+        private readonly CharactersRepository repository;
         private readonly IMapper _mapper;
-
-        private IList<Character> AllCharacters;
-        private IList<Image> AllImages;
-        private Dictionary<int, string> Breeds;
-        private Dictionary<int, string> TypesOfCharacter;
-        private Dictionary<int, string> Orientations;
-        private Dictionary<int, string> AlignmentCharts;
 
         public HomeController(ILogger<HomeController> logger, IMapper mapper)
         {
             _logger = logger;
             _mapper = mapper;
-            service = new Service.Service();
-            
-            LoadAllData(); 
-        }
-             
-
-        private void LoadAllData()
-        {
-            AllCharacters = service.GetAllCharacters();
-            Breeds = service.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
-            TypesOfCharacter = service.GetTypesOfCharacter().ToDictionary(b => b.Id, b => b.Name);
-            Orientations = service.GetOrientations().ToDictionary(b => b.Id, b => b.Name);
-            AlignmentCharts = service.GetAlignmentChatrs().ToDictionary(b => b.Id, b => b.Name);
-
-            AllImages = service.GetAllImages();
-        }   
+            repository = new CharactersRepository();            
+          
+        }             
 
         public IActionResult Index()
-        {            
-            var characters = AllCharacters.Select(x => _mapper.Map<CharacterViewModel>(x)).OrderBy(ch => ch.Name).ToList();
+        {           
+            var characters = repository.GetAllCharacters().Select(x => new AlbumCardViewModel()
+            { Id = x.Id, DisplayName = x.Name + " " + x.Surname }).OrderBy(ch => ch.DisplayName).ToList();
+
+            var avatars = repository.GetAllAvatars();
 
             foreach (var item in characters)
             {
-                item.Images = AllImages.Where(i => i.CharacterId == item.Id).Select(i => _mapper.Map<ImageViewModel>(i)).ToList();
+                item.Avatar = _mapper.Map<ImageViewModel>(avatars.FirstOrDefault(i => i.CharacterId == item.Id)); 
             }
            
-            ViewData["Breeds"] = Breeds;
+            ViewData["Breeds"] = repository.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
             return View(characters);
         }
 
         public IActionResult CharacterView(int characterId)
         {
-            var character = AllCharacters.FirstOrDefault(ch => ch.Id == characterId);
-            var result = _mapper.Map<CharacterViewModel>(character);
+            var mapper = new CharacterMapper();
+            var character = mapper.MapToView(repository.GetCharacterById(characterId));
 
-            result.Images = AllImages.Where(i => i.CharacterId == character.Id).Select(i => _mapper.Map<ImageViewModel>(i)).ToList();
+            character.Images = repository.GetAllImages().Where(i => i.CharacterId == characterId).Select(i => _mapper.Map<ImageViewModel>(i)).ToList();
 
-            ViewData["Characters"] = AllCharacters.ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);
-            ViewData["TypeOfCharacters"] = TypesOfCharacter;
-            ViewData["Orientations"] = Orientations;
-            ViewData["AlignmentCharts"] = AlignmentCharts;
-            ViewData["Breeds"] = Breeds;
+            HttpContext.Session.SetComplexData("NewRelationships", character.Relationships);
 
-            return View("~/Views/Character/CharacterView.cshtml", result);
+            ViewData["Characters"] = repository.GetAllCharacters().ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);
+            ViewData["TypeOfCharacters"] = repository.GetTypesOfCharacter().ToDictionary(b => b.Id, b => b.Name); ;
+            ViewData["Orientations"] = repository.GetOrientations().ToDictionary(b => b.Id, b => b.Name); ;
+            ViewData["AlignmentCharts"] = repository.GetAlignmentChatrs().ToDictionary(b => b.Id, b => b.Name);
+            ViewData["Breeds"] = repository.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
+
+            return View("~/Views/Character/CharacterView.cshtml", character);
         }
 
         public IActionResult Informations()
@@ -86,44 +71,27 @@ namespace CharactersManager.Controllers
 
         public IActionResult FullSizeImage(int imageId)
         {
-            var image = _mapper.Map<ImageViewModel>(AllImages.FirstOrDefault(i => i.Id == imageId));
+            var image = _mapper.Map<ImageViewModel>(repository.GetAllImages().FirstOrDefault(i => i.Id == imageId));
             return View("~/Views/Character/FullSizeImage.cshtml", image);
         }
 
         [HttpPost]
         public IActionResult Save(CharacterViewModel characterViewModel)
         {
-            var mapper = new CharacterViewToModelMapper();
+            var mapper = new CharacterMapper();
+            characterViewModel.Relationships.AddRange(HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships"));
             var character = mapper.MapToModel(characterViewModel);
-
-            using (var context = new CharacterDbContext())
+         
+            if (characterViewModel.Id == 0)
             {
-                if (characterViewModel.Id == 0)
-                {
-                    context.Characters.Add(character);
-                }
-                else
-                {
-                    character.Appearance.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Appearance.Id;
-                    character.Personality.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Personality.Id;
-                    character.Origin.Id = AllCharacters.FirstOrDefault(ch => ch.Id == characterViewModel.Id).Origin.Id;
-                    var relationships = HttpContext.Session.GetComplexData<List<RelationshipViewModel>>("NewRelationships");
-                    if (character.Relationships.Length == 0 && relationships != null)
-                    {
-                        character.Relationships = String.Join(",", relationships.Select(r => r.TargetRelationshipCharacterName + "-" + r.Type));
-                    }
-                    else if (relationships != null)
-                    {
-                        character.Relationships += "," + relationships.Select(r => r.TargetRelationshipCharacterName + "-" + r.Type);
-                    }
-
-
-                    context.Characters.Update(character);
-                }
-
-                context.SaveChanges();
-                HttpContext.Session.Clear();
+                repository.AddCharacter(character);
             }
+            else
+            {
+                repository.UpdateCharacter(character);
+            }
+
+            HttpContext.Session.Clear();
 
             return Redirect($"/Home/CharacterView?characterId={character.Id}");
         }
@@ -136,17 +104,7 @@ namespace CharactersManager.Controllers
 
         public IActionResult DeleteCharacter(int characterId)
         {
-            using (var context = new CharacterDbContext())
-            {
-                var character = context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality)
-                    .FirstOrDefault(ch => ch.Id == characterId);
-
-                context.Origins.Remove(character.Origin);
-                context.Pertonalities.Remove(character.Personality);
-                context.Appearances.Remove(character.Appearance);
-                context.Characters.Remove(character);
-                context.SaveChanges();
-            }
+            repository.DeleteCharacter(characterId);
 
             return Redirect("/Home/Index");
         }
@@ -156,19 +114,21 @@ namespace CharactersManager.Controllers
         {
             var newCharacter = new CharacterViewModel();
 
-            ViewData["Characters"] = AllCharacters.ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);
-            ViewData["TypeOfCharacters"] = TypesOfCharacter;
-            ViewData["Orientations"] = Orientations ;
-            ViewData["AlignmentCharts"] = AlignmentCharts;
-            ViewData["Breeds"] = Breeds;
+            ViewData["Characters"] = repository.GetAllCharacters().ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);    
+            ViewData["TypeOfCharacters"] = repository.GetTypesOfCharacter().ToDictionary(b => b.Id, b => b.Name); ;
+            ViewData["Orientations"] = repository.GetOrientations().ToDictionary(b => b.Id, b => b.Name); ;
+            ViewData["AlignmentCharts"] = repository.GetAlignmentChatrs().ToDictionary(b => b.Id, b => b.Name);
+            ViewData["Breeds"] = repository.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
 
             return View("~/Views/Character/CharacterView.cshtml", newCharacter); ;
         }
 
         public IActionResult Filter(int breedId, int other)
         {
-            var characters = AllCharacters.Where(ch => ch.Appearance.BreedId == breedId).Select(x => _mapper.Map<CharacterViewModel>(x)).ToList();
-            ViewData["Breeds"] = Breeds;
+            var characters = repository.GetAllCharacters().Where(ch => ch.Appearance.BreedId == breedId).Select(x => new AlbumCardViewModel()
+            { Id = x.Id, DisplayName = x.Name + " " + x.Surname }).OrderBy(ch => ch.DisplayName).ToList();
+
+            ViewData["Breeds"] = repository.GetAllBreeds();
             return View("~/Views/Home/Index.cshtml", characters);
         }
 
@@ -188,20 +148,20 @@ namespace CharactersManager.Controllers
         [HttpGet]
         public int Exist(string relationshipCharacterName)
         {
-            return AllCharacters.FirstOrDefault(ch => (ch.Name + " " + ch.Surname).Equals(relationshipCharacterName)).Id;
+            return repository.GetAllCharacters().FirstOrDefault(ch => (ch.Name + " " + ch.Surname).Equals(relationshipCharacterName)).Id;
         }
 
         [HttpGet]
         public IActionResult GetRelationhips(int characterId)
         {
-            var relationships = AllCharacters.FirstOrDefault(ch => ch.Id == characterId).Relationships;
+            var relationships = repository.GetAllCharacters().FirstOrDefault(ch => ch.Id == characterId).Relationships;
             return Json(relationships);
         }    
 
         [HttpGet]
         public IActionResult GetAllCharacters()
         {
-            var characters = AllCharacters.ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);
+            var characters = repository.GetAllCharacters().ToDictionary(ch => ch.Id, ch => ch.Name + " " + ch.Surname);
             return Json(characters);
         }      
 

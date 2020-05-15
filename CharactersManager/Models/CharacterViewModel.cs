@@ -1,4 +1,5 @@
 ﻿
+using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 
 namespace CharactersManager.Models
@@ -17,7 +18,8 @@ namespace CharactersManager.Models
         public OriginViewModel Origin { get; set; }
         public string Profesion { get; set; } 
         public int BirthErrar { get; set; }
-        public List<string> Relationships { get; set; }
+        [BindProperty]
+        public List<RelationshipViewModel> Relationships { get; set; }
         public PersonalityViewModel Personality { get; set; }
         public AppearanceViewModel Appearance { get; set; }
         public List<ImageViewModel> Images { get; set; }
@@ -25,7 +27,7 @@ namespace CharactersManager.Models
         public CharacterViewModel()
         {
             Origin = new OriginViewModel();
-            Relationships = new List<string>();
+            Relationships = new List<RelationshipViewModel>();
             Personality = new PersonalityViewModel();
             Appearance = new AppearanceViewModel();
             Images = new List<ImageViewModel>();

@@ -10,5 +10,10 @@ namespace CharactersManager.Models
         public int CharacterId { get; set; }   
         public string TargetRelationshipCharacterName { get; set; }
         public string Type { get; set; }
+
+        public override string ToString()
+        {
+            return TargetRelationshipCharacterName + " - " + Type;
+        }
     }
 }

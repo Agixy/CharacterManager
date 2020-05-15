@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace CharactersManager.Mappings
 {
-    public class CharacterViewToModelMapper
+    public class CharacterMapper
     {
         private static readonly Lazy<IMapper> Lazy = new Lazy<IMapper>(() =>
         {
@@ -24,10 +24,27 @@ namespace CharactersManager.Mappings
 
         public Character MapToModel(CharacterViewModel characterViewModel)
         {            
-            var character = Mapper.Map<Character>(characterViewModel);       
+            var character = Mapper.Map<Character>(characterViewModel);  
+
+            
+
             return character;
         }
 
-         
+        public CharacterViewModel MapToView(Character character)
+        {
+            var characterViewModel = Mapper.Map<CharacterViewModel>(character);
+
+            if(character.Relationships != null && character.Relationships != String.Empty)
+            {
+                foreach (var relationship in character.Relationships.Split(',').ToList())
+                {
+                    var array = relationship.Split('-').ToArray();
+                    characterViewModel.Relationships.Add(new RelationshipViewModel() { CharacterId = character.Id, TargetRelationshipCharacterName = array[0], Type = array[1] });
+                }
+            }         
+
+            return characterViewModel;
+        }
     }
 }

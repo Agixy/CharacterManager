@@ -19,7 +19,7 @@ namespace CharactersManager.Mappings
             CreateMap<AppearanceViewModel, Appearance>();          
 
 
-            CreateMap<Character, CharacterViewModel>().AfterMap((src, dest) => dest.Relationships = src.Relationships?.Split(',').ToList());         
+            CreateMap<Character, CharacterViewModel>().ForMember(x => x.Relationships, opt => opt.Ignore());
             CreateMap<Origin, OriginViewModel>();
             CreateMap<Personality, PersonalityViewModel>();
             CreateMap<Appearance, AppearanceViewModel>();

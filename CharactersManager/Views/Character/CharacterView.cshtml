@@ -94,27 +94,24 @@
                                 {
                                     foreach (var item in Model.Relationships)
                                     {
-                                        var name = item.Split("-").First();
-                                        var existingCharacter = characters.FirstOrDefault(ch => ch.Value.Equals(name));
+                                        var existingCharacter = characters.FirstOrDefault(ch => ch.Value.Equals(item.TargetRelationshipCharacterName));
 
-                                        if (item.Length > 0)
+                                        if (existingCharacter.Value != null)
                                         {
-                                            if (existingCharacter.Value != null)
-                                            {
                                                 <p>
                                                     <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = existingCharacter.Key })'" class="btn-relation-char">@item</button>
                                                 </p>
-                                            }
-                                            else
-                                            {
+                                        }
+                                        else
+                                        {
                                                 <p>
                                                     <button type="button" class="btn-relation-char">@item</button>
                                                 </p>
-                                            }
+                                        }
+
                                         }
                                     }
                                 }
-                            }
                         </div>
                     </div>
 
@@ -150,10 +147,22 @@
                     @Html.HiddenFor(m => m.Origin.BookIds[i])
                 }
 
-             <div>
-                 <input type="submit" value="Zapisz" onclick="ClearTemporaryJSArrays()" class="blue-btn save-btn" />
-             </div>
                
+            <div>
+                @for (var i = 0; i < Model.Relationships.Count; i++)
+                {
+                    @Html.HiddenFor(m => Model.Relationships[i].CharacterId)
+                    @Html.HiddenFor(m => Model.Relationships[i].TargetRelationshipCharacterName)
+                    @Html.HiddenFor(m => Model.Relationships[i].Type)
+                }
+            </div>
+                  
+                
+
+                <div>
+                    <input type="submit" value="Zapisz" onclick="ClearTemporaryJSArrays()" class="blue-btn save-btn" />
+                </div>
+
             </form>
         </div>
     </div>
