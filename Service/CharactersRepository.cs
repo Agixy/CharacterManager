@@ -18,9 +18,17 @@ namespace Service
         {
             using (var context = new CharacterDbContext())
             {
-                return context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).ToList();
+                return context.Characters.ToList();
             }
         }
+
+        public List<Character> GetCharactersByBreed(int breedId)
+        {
+            using (var context = new CharacterDbContext())
+            {
+                return context.Characters.Where(ch => ch.Appearance.BreedId == breedId).ToList();
+            }
+        }       
 
         public List<Breed> GetAllBreeds()
         {
@@ -67,6 +75,14 @@ namespace Service
             using (var context = new ImageDbContext())
             {
                 return context.Images.Where(i => i.IsAvatar == true).ToList();
+            }
+        }
+
+        public Image GetImageById(int imageId)
+        {
+            using (var context = new ImageDbContext())
+            {
+                return context.Images.FirstOrDefault(i => i.Id == imageId);
             }
         }
 
