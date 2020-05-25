@@ -7,167 +7,172 @@
     IDictionary<int, string> Orientations = ViewData["Orientations"] as Dictionary<int, string>;
     IDictionary<int, string> AlignmentCharts = ViewData["AlignmentCharts"] as Dictionary<int, string>;
     IDictionary<int, string> Breeds = ViewData["Breeds"] as Dictionary<int, string>;
+    string disableEditing = ViewData["DisableEditing"] as string;
 }
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
+<body onload="DisableEditingCharacter(@disableEditing)">
 
-<div class="container text-light">
-    <div class="main-position text-center">
-        <h2>@Model.DisplayName</h2>
-    </div>
-
-    @{
-        Html.RenderPartial("~/Views/Character/Gallery.cshtml", Model.Images);
-    }
-
-    <div class="row">
-        <div class="col-md-6 mb-3">
-            <form asp-action="UploadImage"
-                  asp-controller="Home"
-                  asp-route-characterId="@Model.Id"
-                  method="post"
-                  enctype="multipart/form-data">
-                <input type="file" id="file1"
-                       name="file1"
-                       multiple="multiple" />
-                <button class="blue-btn" type="submit">Zapisz zdjęcie</button>
-            </form>
+    <div class="container text-light">
+        <div class="main-position text-center">
+            <h2>@Model.DisplayName</h2>
         </div>
-    </div>
 
-    <hr class="mb-4" style="background-color: #97a6b4">
+        @{
+            Html.RenderPartial("~/Views/Character/Gallery.cshtml", Model.Images);
+        }
 
-    <div class="row">
-        <div class="col-md-10 order-md-1">
-            <h4 class="mb-3">Informacje ogólne</h4>
+        <div class="row">
+            <div id="uploadImage" class="col-md-6 mb-3">
+                <form asp-action="UploadImage"
+                      asp-controller="Home"
+                      asp-route-characterId="@Model.Id"
+                      method="post"
+                      enctype="multipart/form-data">
+                    <input type="file" id="file1"
+                           name="file1"
+                           multiple="multiple" />
+                    <button class="blue-btn" type="submit">Zapisz zdjęcie</button>
+                </form>
+            </div>
+        </div>
 
-             <form class="needs-validation" method="post" action="@Url.Action("Save", "Home", Model)">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="Name">Imie</label>
-                        <input type="text" class="form-control need-password" name="Name" id="Name" placeholder="" value="@Model.Name">
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="Spieces">Nazwisko</label>
-                        <input type="text" class="form-control need-password" name="Surname" id="Surname" placeholder="" value="@Model.Surname">
-                    </div>
-                </div>
+        <hr class="mb-4" style="background-color: #97a6b4">
 
-                <div class="row">
+        <div class="row">
+            <div class="col-md-10 order-md-1">
+                <h4 class="mb-3">Informacje ogólne</h4>
 
-                    <div class="col-md-6 mb-3">
-                        <label for="BirthErrar">Errar urodzenia<span class="text-muted"></span></label>
-                        <input asp-for="BirthErrar" type="number" class="form-control need-password" placeholder="">
-                    </div>
-
-                    <div class="col-md-6 mb-3 text-center">
-                        <h5>Płeć</h5>
-                        <div class="custom-control custom-radio">
-                            <input asp-for="Sex" id="Mężczyzna" type="radio" value="Mężczyzna" class="custom-control-input need-password">
-                            <label class="custom-control-label" for="Mężczyzna"></label>
-                            <i class="fa fa-mars col-md-1 mb-2" style="font-size:24px"></i>
+                <form class="needs-validation" method="post" action="@Url.Action("Save", "Home", Model)">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Name">Imie</label>
+                            <input type="text" class="form-control need-password" name="Name" id="Name" placeholder="" value="@Model.Name">
                         </div>
-                        <div class=" custom-control custom-radio">
-                            <input asp-for="Sex" id="Kobieta" type="radio" value="Kobieta" class="custom-control-input need-password">
-                            <label class="custom-control-label" for="Kobieta"></label>
-                            <i class="fa fa-venus col-md-1" style="font-size:24px"></i>
+                        <div class="col-md-6 mb-3">
+                            <label for="Spieces">Nazwisko</label>
+                            <input type="text" class="form-control need-password" name="Surname" id="Surname" placeholder="" value="@Model.Surname">
                         </div>
                     </div>
-                </div>
 
+                    <div class="row">
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="Profesion">Zawód<span class="text-muted"></span></label>
-                        <input asp-for="Profesion" type="text" class="form-control need-password" placeholder="">
+                        <div class="col-md-6 mb-3">
+                            <label for="BirthErrar">Errar urodzenia<span class="text-muted"></span></label>
+                            <input asp-for="BirthErrar" type="number" class="form-control need-password" placeholder="">
+                        </div>
+
+                        <div class="col-md-6 mb-3 text-center">
+                            <h5>Płeć</h5>
+                            <div class="custom-control custom-radio">
+                                <input asp-for="Sex" id="Mężczyzna" type="radio" value="Mężczyzna" class="custom-control-input need-password">
+                                <label class="custom-control-label" for="Mężczyzna"></label>
+                                <i class="fa fa-mars col-md-1 mb-2" style="font-size:24px"></i>
+                            </div>
+                            <div class=" custom-control custom-radio">
+                                <input asp-for="Sex" id="Kobieta" type="radio" value="Kobieta" class="custom-control-input need-password">
+                                <label class="custom-control-label" for="Kobieta"></label>
+                                <i class="fa fa-venus col-md-1" style="font-size:24px"></i>
+                            </div>
+                        </div>
                     </div>
-                </div>
 
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="relationships">Związki<span class="text-muted"></span></label>
 
-                        <div id="relationships">
-                            @{
-                                if (Model.Relationships != null)
-                                {
-                                    foreach (var item in Model.Relationships)
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="Profesion">Zawód<span class="text-muted"></span></label>
+                            <input asp-for="Profesion" type="text" class="form-control need-password" placeholder="">
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="relationships">Związki<span class="text-muted"></span></label>
+
+                            <div id="relationships">
+                                @{
+                                    if (Model.Relationships != null)
                                     {
-                                        var existingCharacter = characters.FirstOrDefault(ch => ch.Value.Equals(item.TargetRelationshipCharacterName));
-
-                                        if (existingCharacter.Value != null)
+                                        foreach (var item in Model.Relationships)
                                         {
+                                            var existingCharacter = characters.FirstOrDefault(ch => ch.Value.Equals(item.TargetRelationshipCharacterName));
+
+                                            if (existingCharacter.Value != null)
+                                            {
                                                 <p>
                                                     <button type="button" onClick="location.href='@Url.Action("CharacterView", "Home", new { characterId = existingCharacter.Key })'" class="btn-relation-char">@item</button>
                                                 </p>
-                                        }
-                                        else
-                                        {
+                                            }
+                                            else
+                                            {
                                                 <p>
                                                     <button type="button" class="btn-relation-char">@item</button>
                                                 </p>
-                                        }
+                                            }
 
                                         }
                                     }
                                 }
+                            </div>
+                        </div>
+
+                        <div class="col-md-6 mb-3">
+                            @{
+                                Html.RenderPartial("~/Views/Modals/AddRelationship.cshtml", new ViewDataDictionary(this.ViewData));
+                            }
                         </div>
                     </div>
 
-                    <div class="col-md-6 mb-3">
-                        @{
-                            Html.RenderPartial("~/Views/Modals/AddRelationship.cshtml", new ViewDataDictionary(this.ViewData));
+                    <hr class="mb-4" style="background-color: #97a6b4">
+
+                    @Html.HiddenFor(m => m.Appearance)
+                    @{
+                        Html.RenderPartial("~/Views/Character/Appearance.cshtml", Model, new ViewDataDictionary(this.ViewData));
+                    }
+
+                    <hr class="mb-4" style="background-color: #97a6b4">
+
+                    @{
+                        Html.RenderPartial("~/Views/Character/OriginView.cshtml", Model, new ViewDataDictionary(this.ViewData));
+                    }
+                    <hr class="mb-4" style="background-color: #97a6b4">
+                    @{
+                        Html.RenderPartial("~/Views/Character/Personality.cshtml", Model, new ViewDataDictionary(this.ViewData));
+                    }
+                    <hr class="mb-4" style="background-color: #97a6b4">
+
+
+                    @Html.HiddenFor(m => m.Id)
+                    @for (int i = 0; i < Model.Origin.BookIds.Count; i++)
+                    {
+                        @Html.HiddenFor(m => m.Origin.BookIds[i])
+                    }
+
+
+                    <div>
+                        @for (var i = 0; i < Model.Relationships.Count; i++)
+                        {
+                            @Html.HiddenFor(m => Model.Relationships[i].CharacterId)
+                            @Html.HiddenFor(m => Model.Relationships[i].TargetRelationshipCharacterName)
+                            @Html.HiddenFor(m => Model.Relationships[i].Type)
                         }
                     </div>
-                </div>
 
-                <hr class="mb-4" style="background-color: #97a6b4">
+                    <div id="edit">
+                        <input type="button" value="Edytuj" id="edit-character" class="blue-btn save-btn" />
+                    </div>
 
-                @Html.HiddenFor(m => m.Appearance)
-                @{
-                    Html.RenderPartial("~/Views/Character/Appearance.cshtml", Model, new ViewDataDictionary(this.ViewData));
-                }
+                    @{
+                        Html.RenderPartial("~/Views/Modals/GetSavingPassword.cshtml");
+                    }
 
-                <hr class="mb-4" style="background-color: #97a6b4">
-
-                @{
-                    Html.RenderPartial("~/Views/Character/OriginView.cshtml", Model, new ViewDataDictionary(this.ViewData));
-                }
-                <hr class="mb-4" style="background-color: #97a6b4">
-                @{
-                    Html.RenderPartial("~/Views/Character/Personality.cshtml", Model, new ViewDataDictionary(this.ViewData));
-                }
-                <hr class="mb-4" style="background-color: #97a6b4">
-
-
-                @Html.HiddenFor(m => m.Id)
-                @for (int i = 0; i < Model.Origin.BookIds.Count; i++)
-                {
-                    @Html.HiddenFor(m => m.Origin.BookIds[i])
-                }
-
-               
-            <div>
-                @for (var i = 0; i < Model.Relationships.Count; i++)
-                {
-                    @Html.HiddenFor(m => Model.Relationships[i].CharacterId)
-                    @Html.HiddenFor(m => Model.Relationships[i].TargetRelationshipCharacterName)
-                    @Html.HiddenFor(m => Model.Relationships[i].Type)
-                }
+                </form>
             </div>
-                  
-                
-
-                <div>
-                    <input type="submit" value="Zapisz" onclick="ClearTemporaryJSArrays()" class="blue-btn save-btn" />
-                </div>
-
-            </form>
         </div>
+
+
+        <footer class="my-5 pt-5 text-muted text-center text-small">
+        </footer>
     </div>
-
-
-    <footer class="my-5 pt-5 text-muted text-center text-small">        
-    </footer>
-</div>
+</body>

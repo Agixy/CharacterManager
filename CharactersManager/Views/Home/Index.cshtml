@@ -5,8 +5,9 @@
     IDictionary<int, string> breeds = ViewData["Breeds"] as Dictionary<int, string>;
 }
 
+<body onload="DisableDeleteCharacter(true)">
 
-<main role="main" class="main-position">
+    <main role="main" class="main-position">
     <div class="characters-album-header text-center pb-4">
         <div class="container">
             <h1>Uniwersum Wordenii</h1>
@@ -38,22 +39,20 @@
             <button class="btn-album-option force-to-bottom-left blue-btn" id="Filter">Filtruj </button>
         </div>
 
-        <div class="col-md-3 mb-3">            
+        <div class="col-md-3 mb-3">
         </div>
 
         <div class="col-md-2 mb-3">
-            <button id="addNewCharacter" class="btn-album-option force-to-bottom-left blue-btn" value="Save">Dodaj postać</button>
-            @{
-                Html.RenderPartial("~/Views/Modals/GetSavingPassword.cshtml");
-            }
+            <button id="addNewCharacter" class="btn-album-option force-to-bottom-left blue-btn">Dodaj postać</button>
         </div>
 
         <div class="col-md-2 mb-3">
             <button id="deleteAnyCharacter" class="btn-album-option force-to-bottom-left blue-btn">Usuń postać</button>
-            @{
-                 //Html.RenderPartial("~/Views/Modals/GetSavingPassword.cshtml");
-            }
         </div>
+
+        @{
+            Html.RenderPartial("~/Views/Modals/GetSavingPassword.cshtml");
+        }
     </div>
 
     <div class="album py-5">
@@ -68,13 +67,15 @@
             </div>
         </div>
     </div>
-</main>
+    </main>
 
-<footer class="text-muted">
+    <footer class="text-muted">
     <div class="container">
         <p class="float-right">
             <a href="#">Powrót na górę</a>
         </p>
         </div>
-</footer>
+    </footer>
+
+</body>
 

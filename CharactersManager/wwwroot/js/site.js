@@ -6,20 +6,33 @@ var relationships = [];
 var addRelationshipModal = document.getElementById("addModal");
 var getPasswordModal = document.getElementById("savePasswordModal");
 
-DisableAllInputs();
-
-function DisableAllInputs() {
-    $('.need-password').attr("disabled", "disabled");
-    //$('#addRelationshipBtn').hide();
-    $('#editMother').hide();
-    $('#editFather').hide(); 
-    $('.btn-delete-char').hide()    
-    
-    $('input:submit').hide();
+function DisableEditingCharacter(value) {
+    if (value) {
+        $('.need-password').attr("disabled", "disabled");
+        $('#addRelationshipBtn').hide();
+        $('#uploadImage').hide();
+        $('#editMother').hide();
+        $('#editFather').hide();
+        $('input:submit').hide();
+    }
+    else {
+        $('.need-password').attr("disabled", false);
+        $('#addRelationshipBtn').show();
+        $('#uploadImage').show();
+        $('#editMother').show();
+        $('#editFather').show();
+        $('input:submit').show();
+    }  
 };
 
-function EnableAllInputs() {
-    $('.need-password').attr("disabled", "");
+
+function DisableDeleteCharacter(value) {
+    if (value) {
+        $('.btn-delete-char').hide();
+    }
+    else {
+        $('.btn-delete-char').show();
+    }
 };
 
 function ReloadRelationships(characterId, relationshipCharName, relationshipType) {  
@@ -106,15 +119,47 @@ $(function () {
 
 $(function () {
     $('#addNewCharacter').click(function () {
+        document.getElementById("confirmPasswordBtn").onclick = function () { AddNewCharView(); };
         getPasswordModal.style.display = "block";
     });
 });
 
+function AddNewCharView() {
+    if (IsPasswordCorrect() == true) {
+        window.location.href = "Home/CreateNewCharacter";
+    }
+}
+
 $(function () {
     $('#deleteAnyCharacter').click(function () {
+        document.getElementById("confirmPasswordBtn").onclick = function () { Delete(); };        
         getPasswordModal.style.display = "block";
     });
 });
+
+function Delete() {
+    if (IsPasswordCorrect() == true) {
+        DisableDeleteCharacter(false);
+        getPasswordModal.style.display = "none";
+    }
+}
+
+$(function () {
+    $('#edit-character').click(function () {
+        document.getElementById("confirmPasswordBtn").onclick = function () { EnabledEdit(); };
+        getPasswordModal.style.display = "block";
+    });
+});
+
+function EnabledEdit() {
+    if (IsPasswordCorrect() == true) {
+        DisableEditingCharacter(false);
+        $('#edit').replaceWith('<div id="save">' +
+            '<input type="submit" value="Zapisz" onclick="ClearTemporaryJSArrays()" class="blue-btn save-btn" />' +
+            '</div>');
+        getPasswordModal.style.display = "none";
+    }
+}
 
 $(function () {
     $('#close-add-relation').click(function () {
@@ -142,7 +187,7 @@ $(function () {
 
 $(function () {
     $('#Filter').click(function () {
-        window.location.href = "/Home/Filter/" + $('#Breed').val() + "/" + 4;
+        window.location.href = "/Home/Filter/" + $('#Breed').val();
     });
 });
 
@@ -156,18 +201,19 @@ $(function () {
     });       
 });
 
-$(document).ready(function () {
-    $('#confirm-password').click(function () {
-        $.ajax({            
-            type: 'GET',
-            url: '/Home/IsPasswordCorrect',
-            data: { password: $('#Password').val() },
-            success: function (isPasswordCorrect) {
-                if (isPasswordCorrect) {                    
-                    window.location.assign("/Home/CreateNewCharacter");
-                }               
-            },
-        })
-    });
-   
-});
+function IsPasswordCorrect() {
+    var result = false;
+        $.ajax({
+        type: 'GET',
+        async: false,
+        url: '/Home/IsPasswordCorrect',
+        data: { password: $('#Password').val() },
+        success: function (data) {
+            result = data;
+        },
+        });
+    return result;
+};
+
+
+

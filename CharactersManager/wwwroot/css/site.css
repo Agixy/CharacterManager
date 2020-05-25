@@ -202,7 +202,7 @@ body {
     margin: auto;
     padding: 0;
     border: 1px solid #888;
-    width: 50%;
+    width: 40%;
     height: 230px;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
     -webkit-animation-name: animatetop;
@@ -237,13 +237,27 @@ body {
     border: 1px solid transparent;
     font-size: 1.2375rem;
     font-weight: 500;
+    border-radius: 0.25rem;    
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+}
+
+.confirm-password-btn {    
+    width: 120px;
+    height: 35%;
+    border: 1px solid transparent;
+    font-size: 1.2375rem;
+    font-weight: 500;
     border-radius: 0.25rem;
-    
     text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
     cursor: pointer;
 }
 
 .add-parent-button:hover {
+    background-color: #41b5d8;
+}
+
+.confirm-password-btn:hover {
     background-color: #41b5d8;
 }
 
@@ -345,6 +359,11 @@ img {
 
 .btn-delete-char{
 
+}
+
+.password-modal-content {
+    justify-content: center;
+    text-align: center;
 }
     
 

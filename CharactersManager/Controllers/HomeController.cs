@@ -60,7 +60,7 @@ namespace CharactersManager.Controllers
         {
             var character = Mapper.Map<CharacterViewModel>(charactersRepository.GetCharacterById(characterId));
 
-            character.Images = charactersRepository.GetAllImages().Where(i => i.CharacterId == characterId).Select(i => Mapper.Map<ImageViewModel>(i)).ToList();
+            character.Images = charactersRepository.GetImagesByCharacterId(characterId).Select(i => Mapper.Map<ImageViewModel>(i)).ToList();
 
             HttpContext.Session.SetComplexData("NewRelationships", character.Relationships);
 
@@ -69,6 +69,7 @@ namespace CharactersManager.Controllers
             ViewData["Orientations"] = charactersRepository.GetOrientations().ToDictionary(b => b.Id, b => b.Name); ;
             ViewData["AlignmentCharts"] = charactersRepository.GetAlignmentChatrs().ToDictionary(b => b.Id, b => b.Name);
             ViewData["Breeds"] = charactersRepository.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
+            ViewData["DisableEditing"] = "true";
 
             return View("~/Views/Character/CharacterView.cshtml", character);
         }
@@ -108,7 +109,14 @@ namespace CharactersManager.Controllers
         [HttpGet]
         public bool IsPasswordCorrect(string password)
         {
-            return password.Equals("password");
+            if(password != null && password.Equals("password"))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public IActionResult DeleteCharacter(int characterId)
@@ -128,6 +136,7 @@ namespace CharactersManager.Controllers
             ViewData["Orientations"] = charactersRepository.GetOrientations().ToDictionary(b => b.Id, b => b.Name); ;
             ViewData["AlignmentCharts"] = charactersRepository.GetAlignmentChatrs().ToDictionary(b => b.Id, b => b.Name);
             ViewData["Breeds"] = charactersRepository.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
+            ViewData["DisableEditing"] = "false";
 
             return View("~/Views/Character/CharacterView.cshtml", newCharacter); ;
         }

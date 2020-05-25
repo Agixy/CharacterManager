@@ -86,6 +86,14 @@ namespace Service
             }
         }
 
+        public List<Image> GetImagesByCharacterId(int characterId)
+        {
+            using (var context = new ImageDbContext())
+            {
+                return context.Images.Where(i => i.CharacterId == characterId).ToList();
+            }
+        }
+
         public Character GetCharacterById(int id)
         {
             using (var context = new CharacterDbContext())
