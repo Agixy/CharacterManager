@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Service.Models
+﻿namespace Service.Models
 {
     public class Character
     {

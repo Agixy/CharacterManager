@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Service.Models;
 
 namespace Service
@@ -13,10 +14,16 @@ namespace Service
         public DbSet<TypeOfCharacter> TypeOfCharacters { get; set; }
         public DbSet<Orientation> Orientations { get; set; }
         public DbSet<AlignmentChart> AlignmentCharts { get; set; }
+        private readonly IConfiguration Configuration;
+
+        public CharacterDbContext()
+        {
+            Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("server=remotemysql.com;database=3axydb5cVN;user=3axydb5cVN;password=KjI6Lektih");
+            optionsBuilder.UseMySQL(Configuration["ConnectionStrings:CharacterDbContext"]);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Service.Models;
 
 namespace Service
@@ -6,10 +7,16 @@ namespace Service
     public class ImageDbContext : DbContext
     {
         public DbSet<Image> Images { get; set; }
+        private readonly IConfiguration Configuration;
+
+        public ImageDbContext()
+        {
+            Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseMySQL("");
+            optionsBuilder.UseMySQL(Configuration["ConnectionStrings:ImageDbContext"]);
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -17,13 +24,8 @@ namespace Service
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.Entity<Image>().Property(e => e.Id).ValueGeneratedOnAdd();
-
-            // lub:
-        //    [Column("Active", TypeName = "bit")]
-        //[DefaultValue(false)]
-
-        modelBuilder.Entity<Image>()
-                  .Property(p => p.IsAvatar).HasColumnType("bit");
+            modelBuilder.Entity<Image>()
+                      .Property(p => p.IsAvatar).HasColumnType("bit");
             modelBuilder.Entity<Image>()
                 .Property(p => p.ImageData).HasColumnType("LONGBLOB");
         }

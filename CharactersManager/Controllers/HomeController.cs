@@ -8,11 +8,11 @@ using AutoMapper;
 using Service.Models;
 using Service;
 using CharactersManager.Mappings;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using System.IO;
 using System;
+using Microsoft.Extensions.Configuration;
 
 namespace CharactersManager.Controllers
 {
@@ -20,6 +20,7 @@ namespace CharactersManager.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly CharactersRepository charactersRepository;
+        private readonly IConfiguration Configuration;
 
         private static readonly Lazy<IMapper> LazyMapper = new Lazy<IMapper>(() =>
         {
@@ -36,8 +37,8 @@ namespace CharactersManager.Controllers
         public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            charactersRepository = new CharactersRepository();            
-          
+            charactersRepository = new CharactersRepository();
+            Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();
         }             
 
         public IActionResult Index()
@@ -108,8 +109,8 @@ namespace CharactersManager.Controllers
 
         [HttpGet]
         public bool IsPasswordCorrect(string password)
-        {
-            if(password != null && password.Equals("password"))
+        {          
+            if (password != null && password.Equals(Configuration["Editing:Password"]))
             {
                 return true;
             }
