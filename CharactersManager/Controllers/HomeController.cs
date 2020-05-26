@@ -80,6 +80,13 @@ namespace CharactersManager.Controllers
             return View();
         }
 
+        public IActionResult Worlds()
+        {
+            var worldsImageId = 25; // TODO: It is temporary image. It will be a page with text in the future.
+            var imageViewModel = Mapper.Map<ImageViewModel>(charactersRepository.GetImageById(worldsImageId));
+            return View(imageViewModel);
+        }
+
         public IActionResult FullSizeImage(int imageId)
         {
             var image = Mapper.Map<ImageViewModel>(charactersRepository.GetImageById(imageId));
