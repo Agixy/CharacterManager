@@ -113,14 +113,22 @@ namespace Service
 
         public void UpdateCharacter(Character character)
         {
+            UpdateCharacterPropertiesIds(character);
+
             using (var context = new CharacterDbContext())
             {
-                character.Appearance.Id = context.Characters.FirstOrDefault(ch => ch.Id == character.Id).Appearance.Id;
-                character.Personality.Id = context.Characters.FirstOrDefault(ch => ch.Id == character.Id).Personality.Id;
-                character.Origin.Id = context.Characters.FirstOrDefault(ch => ch.Id == character.Id).Origin.Id;               
-
                 context.Characters.Update(character);
                 context.SaveChanges();
+            }
+        }
+
+        private void UpdateCharacterPropertiesIds(Character character)
+        {
+            using (var context = new CharacterDbContext())
+            {
+                character.Appearance.Id = context.Characters.Include(ch => ch.Appearance).FirstOrDefault(ch => ch.Id == character.Id).Appearance.Id;
+                character.Personality.Id = context.Characters.Include(ch => ch.Personality).FirstOrDefault(ch => ch.Id == character.Id).Personality.Id;
+                character.Origin.Id = context.Characters.Include(ch => ch.Origin).FirstOrDefault(ch => ch.Id == character.Id).Origin.Id;
             }
         }
 
