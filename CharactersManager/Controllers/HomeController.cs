@@ -109,8 +109,6 @@ namespace CharactersManager.Controllers
                 charactersRepository.UpdateCharacter(character);
             }
 
-            HttpContext.Session.Clear();
-
             return Redirect($"/Home/CharacterView?characterId={character.Id}");
         }
 
@@ -149,12 +147,19 @@ namespace CharactersManager.Controllers
             return View("~/Views/Character/CharacterView.cshtml", newCharacter); ;
         }
 
-        public IActionResult Filter(int breedId, int other)
+        public IActionResult Filter(int breedId)
         {
             var characters = charactersRepository.GetCharactersByBreed(breedId).Select(x => new AlbumCardViewModel()
             { Id = x.Id, DisplayName = x.Name + " " + x.Surname }).OrderBy(ch => ch.DisplayName).ToList();
 
-            ViewData["Breeds"] = charactersRepository.GetAllBreeds();
+            var avatars = charactersRepository.GetAllAvatars();
+
+            foreach (var character in characters)
+            {
+                character.Avatar = Mapper.Map<ImageViewModel>(avatars.FirstOrDefault(i => i.CharacterId == character.Id));
+            }
+
+            ViewData["Breeds"] = charactersRepository.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
             return View("~/Views/Home/Index.cshtml", characters);
         }
 

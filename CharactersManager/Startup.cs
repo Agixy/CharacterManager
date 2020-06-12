@@ -66,7 +66,7 @@ namespace CharactersManager
                     pattern: "{controller=Home}/{action=Index}");
                 endpoints.MapControllerRoute(
                     name: "filterCharacters",
-                    pattern: "{controller}/{action}/{breedId}/{other}");
+                    pattern: "{controller}/{action}/{breedId}");
                 endpoints.MapControllerRoute(
                   name: "addRelationship",
                   pattern: "{controller}/{action}/{characterId}/{relationshipCharacterId}/{relationship}");
