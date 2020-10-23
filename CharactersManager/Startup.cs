@@ -3,10 +3,13 @@ using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Newtonsoft.Json;
+using Service;
+using Service.Interfaces;
 
 namespace CharactersManager
 {
@@ -23,16 +26,20 @@ namespace CharactersManager
         {
             services.AddControllersWithViews();
             services.AddRazorPages().AddRazorRuntimeCompilation();
-            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  // typeof(Startup) LUB services.AddAutoMapper(System.Reflection.Assembly.GetExecutingAssembly());
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());  // typeof(Startup) OR services.AddAutoMapper(System.Reflection.Assembly.GetExecutingAssembly());
             services.AddControllers().AddNewtonsoftJson(options => options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore);
             services.AddDistributedMemoryCache();
             services.AddSession(options => { options.IdleTimeout = TimeSpan.FromMinutes(1); });
             services.AddMvc();
             services.AddAntiforgery(o => o.SuppressXFrameOptionsHeader = true);
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
+            services.AddDbContext<CharacterDbContext>(options =>options.UseMySql(Configuration.GetConnectionString("CharactersDBConntectionString")));
+            services.AddDbContext<ImageDbContext>(options =>options.UseMySql(Configuration.GetConnectionString("ImagesDBConntectionString")));
+            services.AddScoped<ICharactersRepository, CharactersRepository>();
 
             services.Configure<CookiePolicyOptions>(options =>
             {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
                 options.CheckConsentNeeded = context => true;
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });

@@ -6,20 +6,19 @@ using Microsoft.Extensions.Logging;
 using CharactersManager.Models;
 using AutoMapper;
 using Service.Models;
-using Service;
 using CharactersManager.Mappings;
 using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
-using System.IO;
 using System;
 using Microsoft.Extensions.Configuration;
+using Service.Interfaces;
 
 namespace CharactersManager.Controllers
 {
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly CharactersRepository charactersRepository;
+        private readonly ICharactersRepository charactersRepository;
         private readonly IConfiguration Configuration;
 
         private static readonly Lazy<IMapper> LazyMapper = new Lazy<IMapper>(() =>
@@ -34,11 +33,11 @@ namespace CharactersManager.Controllers
 
         private static IMapper Mapper => LazyMapper.Value;       
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IConfiguration configuration, ICharactersRepository repository)
         {
             _logger = logger;
-            charactersRepository = new CharactersRepository();
-            Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();
+            charactersRepository = repository;
+            Configuration = configuration;
         }             
 
         public IActionResult Index()
@@ -115,7 +114,7 @@ namespace CharactersManager.Controllers
         [HttpGet]
         public bool IsPasswordCorrect(string password)
         {          
-            if (password != null && password.Equals(Configuration["Editing:Password"]))
+            if (password != null && password.Equals(Configuration.GetSection("Editing")["Password"]))
             {
                 return true;
             }
@@ -199,27 +198,7 @@ namespace CharactersManager.Controllers
         [HttpPost]
         public IActionResult UploadImage(int characterId)
         {
-            foreach (var file in Request.Form.Files)
-            {
-                Image img = new Image();
-                img.ImageTitle = file.FileName;
-
-                MemoryStream ms = new MemoryStream();
-                file.CopyTo(ms);
-                img.IsAvatar = true;
-                img.CharacterId = characterId;
-                img.ImageData = ms.ToArray();
-
-                ms.Close();
-                ms.Dispose();
-
-                using (var context = new ImageDbContext())
-                {
-                    context.Images.Add(img);
-                    context.SaveChanges();
-                }
-            }
-
+            charactersRepository.AddImage(characterId, Request.Form.Files);
             return Redirect($"/Home/CharacterView?characterId={characterId}");
         }
 

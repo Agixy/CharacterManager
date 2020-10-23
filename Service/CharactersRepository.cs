@@ -1,165 +1,141 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Service.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using System.IO;
+using Service.Interfaces;
 
 namespace Service
 {
-    public class CharactersRepository
+    public class CharactersRepository : ICharactersRepository
     {
-        public CharactersRepository()
+        private readonly CharacterDbContext characterDb;
+        private readonly ImageDbContext imageDb;
+
+        public CharactersRepository(CharacterDbContext characterDbContext, ImageDbContext imageDbCOntext)
         {
+            characterDb = characterDbContext;
+            imageDb = imageDbCOntext;
             CreateDatabase();
         }
 
-        public List<Character> GetAllCharacters()
+        public IList<Character> GetAllCharacters()
         {
-            using (var context = new CharacterDbContext())
-            {
-                return context.Characters.ToList();
-            }
+            return characterDb.Characters.ToList();
         }
 
-        public List<Character> GetCharactersByBreed(int breedId)
+        public IList<Character> GetCharactersByBreed(int breedId)
         {
-            using (var context = new CharacterDbContext())
-            {
-                return context.Characters.Where(ch => ch.Appearance.BreedId == breedId).ToList();
-            }
-        }       
-
-        public List<Breed> GetAllBreeds()
-        {
-            using (var context = new CharacterDbContext())
-            {
-                return context.Breeds.ToList();
-            }
+            return characterDb.Characters.Where(ch => ch.Appearance.BreedId == breedId).ToList();
         }
 
-        public List<Orientation> GetOrientations()
+        public IList<Breed> GetAllBreeds()
         {
-            using (var context = new CharacterDbContext())
-            {
-                return context.Orientations.ToList();
-            }
+            return characterDb.Breeds.ToList();
         }
 
-        public List<TypeOfCharacter> GetTypesOfCharacter()
+        public IList<Orientation> GetOrientations()
         {
-            using (var context = new CharacterDbContext())
-            {
-                return context.TypeOfCharacters.ToList();
-            }
+            return characterDb.Orientations.ToList();
         }
 
-        public List<AlignmentChart> GetAlignmentChatrs()
+        public IList<TypeOfCharacter> GetTypesOfCharacter()
         {
-            using (var context = new CharacterDbContext())
-            {
-                return context.AlignmentCharts.ToList();
-            }
+            return characterDb.TypeOfCharacters.ToList();
         }
 
-        public List<Image> GetAllImages()
+        public IList<AlignmentChart> GetAlignmentChatrs()
         {
-            using (var context = new ImageDbContext())
-            {
-                return context.Images.ToList();
-            }
+            return characterDb.AlignmentCharts.ToList();
         }
 
-        public List<Image> GetAllAvatars()
+        public IList<Image> GetAllImages()
         {
-            using (var context = new ImageDbContext())
-            {
-                return context.Images.Where(i => i.IsAvatar == true).ToList();
-            }
+            return imageDb.Images.ToList();
+        }
+
+        public IList<Image> GetAllAvatars()
+        {
+            return imageDb.Images.Where(i => i.IsAvatar == true).ToList();
         }
 
         public Image GetImageById(int imageId)
         {
-            using (var context = new ImageDbContext())
-            {
-                return context.Images.FirstOrDefault(i => i.Id == imageId);
-            }
+            return imageDb.Images.FirstOrDefault(i => i.Id == imageId);
         }
 
-        public List<Image> GetImagesByCharacterId(int characterId)
+        public IList<Image> GetImagesByCharacterId(int characterId)
         {
-            using (var context = new ImageDbContext())
+            return imageDb.Images.Where(i => i.CharacterId == characterId).ToList();
+        }
+
+        public void AddImage(int characterId, IFormFileCollection fileList)
+        {
+            foreach (var file in fileList)
             {
-                return context.Images.Where(i => i.CharacterId == characterId).ToList();
+                Image img = new Image();
+                img.ImageTitle = file.FileName;
+
+                MemoryStream ms = new MemoryStream();
+                file.CopyTo(ms);
+                img.IsAvatar = true;
+                img.CharacterId = characterId;
+                img.ImageData = ms.ToArray();
+
+                ms.Close();
+                ms.Dispose();
+
+                imageDb.Images.Add(img);
+                imageDb.SaveChanges();
             }
         }
 
         public Character GetCharacterById(int id)
         {
-            using (var context = new CharacterDbContext())
-            {
-                return context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).FirstOrDefault(ch => ch.Id == id);
-            }
+            return characterDb.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).FirstOrDefault(ch => ch.Id == id);
         }
 
         public void AddCharacter(Character character)
         {
-            using (var context = new CharacterDbContext())
-            {
-                context.Add(character);
-                context.SaveChanges();
-            }
+            characterDb.Add(character);
+            characterDb.SaveChanges();
         }
 
         public void UpdateCharacter(Character character)
         {
             UpdateCharacterPropertiesIds(character);
 
-            using (var context = new CharacterDbContext())
-            {
-                context.Characters.Update(character);
-                context.SaveChanges();
-            }
-        }
-
-        private void UpdateCharacterPropertiesIds(Character character)
-        {
-            using (var context = new CharacterDbContext())
-            {
-                character.Appearance.Id = context.Characters.Include(ch => ch.Appearance).FirstOrDefault(ch => ch.Id == character.Id).Appearance.Id;
-                character.Personality.Id = context.Characters.Include(ch => ch.Personality).FirstOrDefault(ch => ch.Id == character.Id).Personality.Id;
-                character.Origin.Id = context.Characters.Include(ch => ch.Origin).FirstOrDefault(ch => ch.Id == character.Id).Origin.Id;
-            }
+            characterDb.Characters.Update(character);
+            characterDb.SaveChanges();
         }
 
         public void DeleteCharacter(int characterId)
         {
-            using (var context = new CharacterDbContext())
-            {
-                var character = context.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality)
-                    .FirstOrDefault(ch => ch.Id == characterId);
+            var character = characterDb.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality)
+                .FirstOrDefault(ch => ch.Id == characterId);
 
-                context.Origins.Remove(character.Origin);
-                context.Pertonalities.Remove(character.Personality);
-                context.Appearances.Remove(character.Appearance);
-                context.Characters.Remove(character);
-                context.SaveChanges();
-            }
+            characterDb.Origins.Remove(character.Origin);
+            characterDb.Pertonalities.Remove(character.Personality);
+            characterDb.Appearances.Remove(character.Appearance);
+            characterDb.Characters.Remove(character);
+            characterDb.SaveChanges();
         }
 
-        private static void CreateDatabase()
+        private void CreateDatabase()
         {
-            using (var context = new CharacterDbContext())
-            {
-                context.Database.EnsureCreated();
-                context.SaveChanges();
-            }
+            characterDb.Database.EnsureCreated();
+            characterDb.SaveChanges();
 
-            using (var context = new ImageDbContext())
-            {
-                context.Database.EnsureCreated();
-                context.SaveChanges();
-            }
+            imageDb.Database.EnsureCreated();
+            imageDb.SaveChanges();
+        }
+
+        private void UpdateCharacterPropertiesIds(Character character)
+        {
+            character.Appearance.Id = characterDb.Characters.Include(ch => ch.Appearance).FirstOrDefault(ch => ch.Id == character.Id).Appearance.Id;
+            character.Personality.Id = characterDb.Characters.Include(ch => ch.Personality).FirstOrDefault(ch => ch.Id == character.Id).Personality.Id;
+            character.Origin.Id = characterDb.Characters.Include(ch => ch.Origin).FirstOrDefault(ch => ch.Id == character.Id).Origin.Id;
         }
     }
 }

@@ -7,17 +7,9 @@ namespace Service
     public class ImageDbContext : DbContext
     {
         public DbSet<Image> Images { get; set; }
-        private readonly IConfiguration Configuration;
 
-        public ImageDbContext()
-        {
-            Configuration = new ConfigurationBuilder().AddJsonFile("secrets.json").Build();
-        }
-
-        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        {
-            optionsBuilder.UseMySQL(Configuration["ConnectionStrings:ImageDbContext"]);
-        }
+        public ImageDbContext(DbContextOptions<ImageDbContext> options)
+            : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
