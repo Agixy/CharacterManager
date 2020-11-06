@@ -143,6 +143,8 @@ namespace CharactersManager.Controllers
             ViewData["Breeds"] = charactersRepository.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
             ViewData["DisableEditing"] = "false";
 
+            HttpContext.Session.SetComplexData("NewRelationships", newCharacter.Relationships);
+
             return View("~/Views/Character/CharacterView.cshtml", newCharacter); ;
         }
 
