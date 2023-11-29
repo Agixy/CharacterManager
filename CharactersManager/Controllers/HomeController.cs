@@ -49,7 +49,7 @@ namespace CharactersManager.Controllers
 
             foreach (var character in characters)
             {
-                character.Avatar = Mapper.Map<ImageViewModel>(avatars.FirstOrDefault(i => i.CharacterId == character.Id)); 
+               // character.Avatar = Mapper.Map<ImageViewModel>(avatars.FirstOrDefault(i => i.CharacterId == character.Id)); 
             }
            
             ViewData["Breeds"] = charactersRepository.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);
@@ -57,10 +57,10 @@ namespace CharactersManager.Controllers
         }
 
         public IActionResult CharacterView(int characterId)
-        {
-            var character = Mapper.Map<CharacterViewModel>(charactersRepository.GetCharacterById(characterId));
+        {            
+            var character = Mapper.Map<CharacterViewModel>(charactersRepository.GetCharacterByIdAsync(characterId).Result);
 
-            character.Images = charactersRepository.GetImagesByCharacterId(characterId).Select(i => Mapper.Map<ImageViewModel>(i)).ToList();
+            //character.Images = charactersRepository.GetImagesByCharacterId(characterId).Select(i => Mapper.Map<ImageViewModel>(i)).ToList();
 
             HttpContext.Session.SetComplexData("NewRelationships", character.Relationships);
 
@@ -81,7 +81,7 @@ namespace CharactersManager.Controllers
 
         public IActionResult Worlds()
         {
-            var worldsImageId = 25; // TODO: It is temporary image. It will be a page with text in the future.
+            var worldsImageId = 7; // TODO: It is temporary image. It will be a page with text in the future.
             var imageViewModel = Mapper.Map<ImageViewModel>(charactersRepository.GetImageById(worldsImageId));
             return View(imageViewModel);
         }
@@ -157,7 +157,7 @@ namespace CharactersManager.Controllers
 
             foreach (var character in characters)
             {
-                character.Avatar = Mapper.Map<ImageViewModel>(avatars.FirstOrDefault(i => i.CharacterId == character.Id));
+                //character.Avatar = Mapper.Map<ImageViewModel>(avatars.FirstOrDefault(i => i.CharacterId == character.Id));
             }
 
             ViewData["Breeds"] = charactersRepository.GetAllBreeds().ToDictionary(b => b.Id, b => b.Name);

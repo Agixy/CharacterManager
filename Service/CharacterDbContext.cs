@@ -14,6 +14,7 @@ namespace Service
         public DbSet<TypeOfCharacter> TypeOfCharacters { get; set; }
         public DbSet<Orientation> Orientations { get; set; }
         public DbSet<AlignmentChart> AlignmentCharts { get; set; }
+        public DbSet<Image> Images { get; set; }
 
         public CharacterDbContext(DbContextOptions<CharacterDbContext> options) 
             : base(options) { }
@@ -31,6 +32,10 @@ namespace Service
             modelBuilder.Entity<Character>().HasOne(e => e.Personality);
             modelBuilder.Entity<Character>().HasOne(e => e.Origin);
             modelBuilder.Entity<Character>().HasOne(e => e.Appearance);
+
+            modelBuilder.Entity<Image>().Property(e => e.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Image>().Property(p => p.IsAvatar).HasColumnType("bit");
+            modelBuilder.Entity<Image>().Property(p => p.ImageData).HasColumnType("LONGBLOB");
         }
     }
 }

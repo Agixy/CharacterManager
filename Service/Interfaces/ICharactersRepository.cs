@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Service.Models;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Service.Interfaces
 {
@@ -13,7 +14,7 @@ namespace Service.Interfaces
         IList<Breed> GetAllBreeds();
         IList<Character> GetAllCharacters();
         IList<Image> GetAllImages();
-        Character GetCharacterById(int id);
+        Task<Character> GetCharacterByIdAsync(int id);
         IList<Character> GetCharactersByBreed(int breedId);
         Image GetImageById(int imageId);
         IList<Image> GetImagesByCharacterId(int characterId);

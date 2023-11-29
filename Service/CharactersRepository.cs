@@ -5,18 +5,19 @@ using System.Linq;
 using Microsoft.AspNetCore.Http;
 using System.IO;
 using Service.Interfaces;
+using System.Threading.Tasks;
 
 namespace Service
 {
     public class CharactersRepository : ICharactersRepository
     {
         private readonly CharacterDbContext characterDb;
-        private readonly ImageDbContext imageDb;
+       // private readonly ImageDbContext imageDb;
 
-        public CharactersRepository(CharacterDbContext characterDbContext, ImageDbContext imageDbCOntext)
+        public CharactersRepository(CharacterDbContext characterDbContext)
         {
             characterDb = characterDbContext;
-            imageDb = imageDbCOntext;
+            //imageDb = imageDbCOntext;
             CreateDatabase();
         }
 
@@ -52,22 +53,22 @@ namespace Service
 
         public IList<Image> GetAllImages()
         {
-            return imageDb.Images.ToList();
+            return characterDb.Images.ToList();
         }
 
         public IList<Image> GetAllAvatars()
         {
-            return imageDb.Images.Where(i => i.IsAvatar == true).ToList();
+            return null; //imageDb.Images.Where(i => i.IsAvatar == true).ToList();
         }
 
         public Image GetImageById(int imageId)
         {
-            return imageDb.Images.FirstOrDefault(i => i.Id == imageId);
+            return null;// imageDb.Images.FirstOrDefault(i => i.Id == imageId);
         }
 
         public IList<Image> GetImagesByCharacterId(int characterId)
         {
-            return imageDb.Images.Where(i => i.CharacterId == characterId).ToList();
+            return null;// imageDb.Images.Where(i => i.CharacterId == characterId).ToList();
         }
 
         public void AddImage(int characterId, IFormFileCollection fileList)
@@ -86,14 +87,15 @@ namespace Service
                 ms.Close();
                 ms.Dispose();
 
-                imageDb.Images.Add(img);
-                imageDb.SaveChanges();
+                characterDb.Images.Add(img);
+                characterDb.SaveChanges();
             }
         }
 
-        public Character GetCharacterById(int id)
+        public async Task<Character> GetCharacterByIdAsync(int id)
         {
-            return characterDb.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).FirstOrDefault(ch => ch.Id == id);
+            return await characterDb.Characters.Include(ch => ch.Appearance).Include(ch => ch.Origin).Include(ch => ch.Personality).FirstOrDefaultAsync(ch => ch.Id == id);
+           
         }
 
         public void AddCharacter(Character character)
@@ -127,8 +129,8 @@ namespace Service
             characterDb.Database.EnsureCreated();
             characterDb.SaveChanges();
 
-            imageDb.Database.EnsureCreated();
-            imageDb.SaveChanges();
+           // imageDb.Database.EnsureCreated();
+           // imageDb.SaveChanges();
         }
 
         private void UpdateCharacterPropertiesIds(Character character)

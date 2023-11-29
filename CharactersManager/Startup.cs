@@ -35,7 +35,7 @@ namespace CharactersManager
             services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.AddDbContext<CharacterDbContext>(options =>options.UseMySql(Configuration.GetConnectionString("CharactersDBConntectionString")));
-            services.AddDbContext<ImageDbContext>(options =>options.UseMySql(Configuration.GetConnectionString("ImagesDBConntectionString")));
+           // services.AddDbContext<ImageDbContext>(options =>options.UseMySql(Configuration.GetConnectionString("ImagesDBConntectionString")));
             services.AddScoped<ICharactersRepository, CharactersRepository>();
 
             services.Configure<CookiePolicyOptions>(options =>
